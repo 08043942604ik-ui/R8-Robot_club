@@ -1,0 +1,27 @@
+#include <memory>
+
+#include <rclcpp/rclcpp.hpp>
+
+#include "Encoder.h"
+
+int main(int argc, char** argv) {
+  // ROS2を初期化
+  rclcpp::init(argc, argv);
+
+  try {
+    // Encodermaノードを作成
+    auto node = std::make_shared<Encoderma>();
+
+    // 20msタイマーのcallback()を実行し続ける
+    rclcpp::spin(node);
+  } catch (const std::exception& error) {
+    RCLCPP_ERROR(
+        rclcpp::get_logger("encoder_main"),
+        "%s",
+        error.what());
+  }
+
+  // Ctrl+Cが押された後、安全にROS2を終了
+  rclcpp::shutdown();
+  return 0;
+}
