@@ -1,0 +1,18 @@
+namespace variable  {
+dRightmotor; //右のモーター
+dLeftmotor; //左のモーター
+dREncoder; //右のエンコーダー 
+dLEncoder; //左のエンコーダー
+titan_; //楽にするためのやつ「_」がつくものは大切でめっちゃ使う変数又は関数
+vmx_; //上記おなじ
+LDistance; //左の走行距離
+RDistance; //右の走行距離
+TotalDistance; //総走行距離
+dTPR; //Ticks Per Revolution
+
+//ここからはポート番号とか
+CANID = 42;
+Rightmotor = 2;
+Leftmotor = 3;
+TPR = 1470;
+motor Frequency = 15600; //モーターの周波数
