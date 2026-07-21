@@ -1,0 +1,44 @@
+#pragma once
+
+#include <array>
+#include <chrono>
+#include <memory>
+
+#include <rclcpp/rclcpp.hpp>
+
+#include "titan.h"
+#include "VMXPi.h"
+
+// 左右のタイヤエンコーダーを20msごとに読み取るROS2ノード
+class Encoderma : public rclcpp::Node {
+ public:
+  Encoderma();
+  ~Encoderma() override;
+
+  // 左M3、右M2の走行距離[m]を返す
+  std::array<double, 2> RLDistance();
+
+  // 元の構成を残すための関数
+  // 今回は車輪エンコーダーなのでリミットスイッチは使用しない
+  void LimitSwitches();
+
+  // 全モーターを停止する
+  void StopAll();
+
+  // 左右のタイヤを低速で回し始める
+  void StartTires();
+
+  // 20msごとに呼ばれ、60秒後の停止と値の表示を行う
+  void callback();
+
+ private:
+  std::shared_ptr<VMXPi> vmx_;
+  std::unique_ptr<studica_driver::Titan> titan_;
+  rclcpp::TimerBase::SharedPtr timer_;
+
+  std::array<double, 2> previous_distance_{0.0, 0.0};
+  double total_distance_ = 0.0;
+  bool first_callback_ = true;
+  bool driving_ = false;
+  std::chrono::steady_clock::time_point start_time_;
+};
