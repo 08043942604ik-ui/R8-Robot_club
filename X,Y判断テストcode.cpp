@@ -16,17 +16,21 @@ count = TotalDistance - //ここにmotorturnが始まる前の総移動距離;
 Kakudo = Kakudo + GetDegree(count);
 
 
-Mrun = false; //最後にfalseを返す}return Kakudo;
+Mrun = false; //最後にfalseを返す
 }
 
+return Kakudo;
 }
+
+
 
 }//GetDegree-man,End
 double GetDegree() {
-//ここで90°回ったら進む距離で割る.例えば90°で約100mm進むならint ad = count * 100;  
+//ここで90°回ったら進む距離で割る.例えば90°で約100mm進むならint ad = count / 100;  
 
 count = 0;
-once = true; //increaseAxisで最初にやる処理のためfirst = true;
+once = true; //increaseAxisで最初にやる処理のため
+first = true;
 
 return ad * 90;
 } //GetDegree終わり
