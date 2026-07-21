@@ -1,5 +1,5 @@
 namespace {
-constexpr int plus;
+constexpr int plus;//a
 constexpr bool xory;//x or y判断
 constexpr double  x = 0.0;
 constexpr double  y = 0.0;
