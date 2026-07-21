@@ -1,0 +1,148 @@
+#include "Encoder.h"
+
+#include <chrono>
+#include <cmath>
+#include <stdexcept>
+
+namespace {
+
+constexpr int kCanId = 42;
+constexpr int kMotorFrequency = 15600;
+
+constexpr int kRightMotor = 2;  // 右タイヤはM2
+constexpr int kLeftMotor = 3;   // 左タイヤはM3
+
+// 5%の低速で60秒間回す
+constexpr double kDriveSpeed = 0.05;
+constexpr double kDriveSeconds = 60.0;
+
+// 実機のTitanエンコーダー設定
+constexpr int kTicksPerRotation = 1470;
+
+// タイヤ直径100mmとして、1回転の距離は約0.314m
+constexpr double kWheelCircumferenceM = 0.314159;
+constexpr double kDistancePerTickM =
+    kWheelCircumferenceM / kTicksPerRotation;
+
+}  // namespace
+
+Encoderma::Encoderma() : Node("studicaTiEC") {
+  // VMXを50Hzで初期化
+  vmx_ = std::make_shared<VMXPi>(true, 50);
+  if (!vmx_->IsOpen()) {
+    throw std::runtime_error(
+        "VMXを開けません。sudoで実行し、他のVMXプログラムを停止してください。");
+  }
+
+  // Titan Quadを初期化
+  titan_ = std::make_unique<studica_driver::Titan>(
+      static_cast<uint8_t>(kCanId),
+      static_cast<uint16_t>(kMotorFrequency),
+      static_cast<float>(kTicksPerRotation),
+      vmx_);
+  titan_->Enable(true);
+
+  // 配線されているENC端子を確認するため、M0～M3を有効化
+  for (int motor = 0; motor < 4; ++motor) {
+    titan_->SetupEncoder(static_cast<uint8_t>(motor));
+    titan_->ConfigureEncoder(
+        static_cast<uint8_t>(motor), kDistancePerTickM);
+    titan_->ResetEncoder(static_cast<uint8_t>(motor));
+  }
+
+  StopAll();
+  StartTires();
+
+  // 20msごとにcallback()を実行
+  timer_ = create_wall_timer(
+      std::chrono::milliseconds(20),
+      [this]() { callback(); });
+}
+
+Encoderma::~Encoderma() {
+  StopAll();
+}
+
+std::array<double, 2> Encoderma::RLDistance() {
+  return {
+      titan_->GetEncoderDistance(static_cast<uint8_t>(kLeftMotor)),
+      titan_->GetEncoderDistance(static_cast<uint8_t>(kRightMotor))};
+}
+
+void Encoderma::LimitSwitches() {
+  // 車輪エンコーダーではリミットスイッチを使用しない
+}
+
+void Encoderma::StopAll() {
+  if (!titan_) {
+    return;
+  }
+
+  // 安全のためTitanのM0～M3をすべて停止
+  for (int motor = 0; motor < 4; ++motor) {
+    titan_->SetSpeed(static_cast<uint8_t>(motor), 0.0);
+  }
+}
+
+void Encoderma::StartTires() {
+  // 左右は取り付け方向が反対なので、速度の符号を反対にする
+  titan_->SetSpeed(static_cast<uint8_t>(kLeftMotor), kDriveSpeed);
+  titan_->SetSpeed(static_cast<uint8_t>(kRightMotor), -kDriveSpeed);
+
+  start_time_ = std::chrono::steady_clock::now();
+  driving_ = true;
+
+  RCLCPP_INFO(
+      get_logger(),
+      "タイヤ回転開始: 左M3=%.2f 右M2=%.2f（60秒後に自動停止）",
+      kDriveSpeed,
+      -kDriveSpeed);
+}
+
+void Encoderma::callback() {
+  const double elapsed_seconds =
+      std::chrono::duration<double>(
+          std::chrono::steady_clock::now() - start_time_)
+          .count();
+
+  // 60秒経過したら一度だけ停止処理を行う
+  if (driving_ && elapsed_seconds >= kDriveSeconds) {
+    StopAll();
+    driving_ = false;
+    RCLCPP_INFO(get_logger(), "60秒経過: タイヤを停止しました。");
+  }
+
+  const auto distance = RLDistance();
+  const int left_count =
+      titan_->GetEncoderCount(static_cast<uint8_t>(kLeftMotor));
+  const int right_count =
+      titan_->GetEncoderCount(static_cast<uint8_t>(kRightMotor));
+
+  if (first_callback_) {
+    previous_distance_ = distance;
+    first_callback_ = false;
+  }
+
+  // 前回から動いた距離を左右で平均し、総移動距離に加算
+  const double left_delta =
+      std::abs(distance[0] - previous_distance_[0]);
+  const double right_delta =
+      std::abs(distance[1] - previous_distance_[1]);
+  total_distance_ += (left_delta + right_delta) / 2.0;
+
+  previous_distance_ = distance;
+  LimitSwitches();
+
+  RCLCPP_INFO_THROTTLE(
+      get_logger(),
+      *get_clock(),
+      500,
+      "時間:%.1f秒 状態:%s | M2:%d M3:%d | 左:%.3fm 右:%.3fm 合計:%.3fm",
+      elapsed_seconds,
+      driving_ ? "回転中" : "停止",
+      right_count,
+      left_count,
+      distance[0],
+      distance[1],
+      total_distance_);
+}
