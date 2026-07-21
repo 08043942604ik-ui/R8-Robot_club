@@ -1,0 +1,538 @@
+cmake_minimum_required(VERSION 3.8)
+project(studica_control)
+
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
+
+find_package(ament_cmake REQUIRED)
+find_package(ament_index_cpp REQUIRED)
+find_package(nav_msgs REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(rclcpp_action REQUIRED)
+find_package(rclcpp_components REQUIRED)
+find_package(rcutils REQUIRED)
+find_package(rosidl_default_generators REQUIRED)
+find_package(rosidl_typesupport_c REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(std_srvs REQUIRED)
+find_package(tf2 REQUIRED)
+find_package(tf2_ros REQUIRED)
+
+find_package(ydlidar_sdk REQUIRED)
+#find_package(OpenCV REQUIRED)
+
+find_package(cv_bridge REQUIRED)
+find_package(image_transport REQUIRED)
+#find_package(OpenCV REQUIRED COMPONENTS highgui imgcodecs imgproc videoio)
+find_package(pluginlib REQUIRED)
+
+
+rosidl_generate_interfaces(${PROJECT_NAME} # <- SRV files (srv, msg, action)
+  "msg/DutyCycleEncoderMsg.msg"
+  "msg/EncoderMsg.msg"
+  "msg/InitializeParams.msg"
+  "srv/ControlImu.srv"
+  "srv/SetData.srv"
+)
+
+include_directories( # <- #include <"">
+  include 
+  /usr/local/include/vmxpi 
+  /usr/local/include/studica_drivers
+  ${CMAKE_CURRENT_BINARY_DIR}/rosidl_generator_cpp
+  ${OpenCV_INCLUDE_DIRS}
+)
+ 
+set(studica_control_HDRS
+  include/studica_control/cobra_component.h
+  include/studica_control/device.h
+  include/studica_control/dc_encoder_component.h
+  include/studica_control/diff_drive_component.h
+  include/studica_control/diff_drive_odometry.h
+  include/studica_control/dio_component.h
+  include/studica_control/encoder_component.h
+  include/studica_control/imu_component.h
+  include/studica_control/mecanum_drive_component.h
+  include/studica_control/servo_component.h
+  include/studica_control/sharp_component.h
+  include/studica_control/titan_component.h
+  include/studica_control/ultrasonic_component.h
+)
+
+set(dependencies 
+  "ament_index_cpp" 
+  "nav_msgs"
+  "rclcpp" 
+  "rclcpp_action"
+  "rclcpp_components" 
+  "sensor_msgs"  
+  "std_msgs" 
+  "std_srvs" 
+  "tf2"
+  "tf2_ros"
+)
+
+add_library(cobra_component SHARED src/components/cobra_component.cpp)
+ament_target_dependencies(cobra_component ${dependencies})
+rclcpp_components_register_nodes(cobra_component "studica_control::cobra")
+
+add_library(dc_encoder_component SHARED src/components/dc_encoder_component.cpp)
+ament_target_dependencies(dc_encoder_component ${dependencies})
+rclcpp_components_register_nodes(dc_encoder_component "studica_control::DutyCycleEncoder")
+
+add_library(diff_drive_component SHARED src/components/diff_drive_component.cpp)
+ament_target_dependencies(diff_drive_component ${dependencies})
+rclcpp_components_register_nodes(diff_drive_component "studica_control::DiffDrive")
+
+add_library(diff_drive_odometry SHARED src/components/diff_drive_odometry.cpp)
+ament_target_dependencies(diff_drive_odometry ${dependencies})
+rclcpp_components_register_nodes(diff_drive_odometry "studica_control::DiffOdometry")
+
+add_library(dio_component SHARED src/components/dio_component.cpp)
+ament_target_dependencies(dio_component ${dependencies})
+rclcpp_components_register_nodes(dio_component "studica_control::DIO")
+
+add_library(encoder_component SHARED src/components/encoder_component.cpp)
+ament_target_dependencies(encoder_component ${dependencies})
+rclcpp_components_register_nodes(encoder_component "studica_control::encoder")
+
+add_library(imu_component SHARED src/components/imu_component.cpp)
+ament_target_dependencies(imu_component ${dependencies})
+rclcpp_components_register_nodes(imu_component "studica_control::imu")
+
+add_library(mecanum_drive_component SHARED src/components/mecanum_drive_component.cpp)
+ament_target_dependencies(mecanum_drive_component ${dependencies})
+rclcpp_components_register_nodes(mecanum_drive_component "studica_control::MecanumDrive")
+
+add_library(mecanum_drive_odometry SHARED src/components/mecanum_drive_odometry.cpp)
+ament_target_dependencies(mecanum_drive_odometry ${dependencies})
+
+add_library(servo_component SHARED src/components/servo_component.cpp)
+ament_target_dependencies(servo_component ${dependencies})
+rclcpp_components_register_nodes(servo_component "studica_control::Servo")
+
+add_library(sharp_component SHARED src/components/sharp_component.cpp)
+ament_target_dependencies(sharp_component ${dependencies})
+rclcpp_components_register_nodes(sharp_component "studica_control::sharp")
+
+add_library(titan_component SHARED src/components/titan_component.cpp)
+ament_target_dependencies(titan_component ${dependencies})
+rclcpp_components_register_nodes(sharp_component "studica_control::Titan")
+
+add_library(ultrasonic_component SHARED src/components/ultrasonic_component.cpp)
+ament_target_dependencies(ultrasonic_component ${dependencies})
+rclcpp_components_register_nodes(ultrasonic_component "studica_control::Ultrasonic")
+
+target_link_libraries(diff_drive_component diff_drive_odometry)
+target_link_libraries(mecanum_drive_component mecanum_drive_odometry)
+
+install(TARGETS 
+  cobra_component
+  dc_encoder_component
+  diff_drive_component
+  diff_drive_odometry
+  dio_component
+  encoder_component
+  imu_component
+  mecanum_drive_component
+  mecanum_drive_odometry
+  servo_component
+  sharp_component
+  titan_component
+  ultrasonic_component  
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
+)
+
+rosidl_get_typesupport_target(cpp_typesupport_target "${PROJECT_NAME}" "rosidl_typesupport_cpp")
+
+add_executable(manual_composition src/manual_composition.cpp)
+target_link_libraries(manual_composition 
+  cobra_component
+  dc_encoder_component
+  diff_drive_component
+  diff_drive_odometry
+  dio_component
+  encoder_component
+  imu_component
+  mecanum_drive_component
+  mecanum_drive_odometry
+  servo_component
+  sharp_component
+  titan_component
+  ultrasonic_component
+  /usr/local/lib/vmxpi/libvmxpi_hal_cpp.so
+  /usr/local/lib/studica_drivers/libstudica_drivers.so
+ 
+)
+ament_target_dependencies(manual_composition ${dependencies})
+target_link_libraries(manual_composition "${cpp_typesupport_target}")
+
+install(TARGETS
+  manual_composition
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+####################################################################
+add_executable(msg_node src/msg_node.cpp)
+
+ament_target_dependencies(msg_node ${dependencies})
+
+target_link_libraries(msg_node "${cpp_typesupport_target}")
+
+install(TARGETS msg_node DESTINATION lib/${PROJECT_NAME})
+
+####################################################################
+add_executable(sharp_node src/sharp_node.cpp)
+
+target_link_libraries(sharp_node 
+/usr/local/lib/vmxpi/libvmxpi_hal_cpp.so
+/usr/local/lib/studica_drivers/libstudica_drivers.so
+"${cpp_typesupport_target}"
+)
+
+ament_target_dependencies(sharp_node ${dependencies})
+
+install(TARGETS sharp_node DESTINATION lib/${PROJECT_NAME})
+
+####################################################################
+add_executable(vmx_driver src/vmx_driver.cpp)
+
+ament_target_dependencies(vmx_driver ${dependencies})
+
+target_link_libraries(vmx_driver 
+/usr/local/lib/vmxpi/libvmxpi_hal_cpp.so
+/usr/local/lib/studica_drivers/libstudica_drivers.so
+"${cpp_typesupport_target}"
+)
+
+install(TARGETS vmx_driver DESTINATION lib/${PROJECT_NAME})
+
+####################################################################
+add_executable(vmx_sample src/vmx_sample.cpp)
+
+ament_target_dependencies(vmx_sample ${dependencies})
+
+target_link_libraries(vmx_sample "${cpp_typesupport_target}")
+
+install(TARGETS vmx_sample DESTINATION lib/${PROJECT_NAME})
+
+####################################################################
+add_executable(ydlidar_driver src/ydlidar_driver.cpp)
+
+ament_target_dependencies(ydlidar_driver ${dependencies})
+
+target_link_libraries(ydlidar_driver "${YDLIDAR_SDK_LIBRARIES}")
+
+install(TARGETS ydlidar_driver DESTINATION lib/${PROJECT_NAME})
+
+####################################################################
+add_executable(mini_ydlidar_driver src/mini_ydlidar_driver.cpp)
+
+ament_target_dependencies(mini_ydlidar_driver ${dependencies})
+
+target_link_libraries(mini_ydlidar_driver "${YDLIDAR_SDK_LIBRARIES}")
+
+install(TARGETS mini_ydlidar_driver DESTINATION lib/${PROJECT_NAME})
+
+####################################################################
+add_executable(ydlidar_sample src/ydlidar_sample.cpp)
+
+ament_target_dependencies(ydlidar_sample ${dependencies})
+
+target_link_libraries(ydlidar_sample "${cpp_typesupport_target}" )
+
+install(TARGETS ydlidar_sample DESTINATION lib/${PROJECT_NAME})
+
+####################################################################
+add_executable(ydlidar_disp_sample src/ydlidar_disp_sample.cpp)
+
+ament_target_dependencies(ydlidar_disp_sample ${dependencies})
+
+target_link_libraries(ydlidar_disp_sample "${cpp_typesupport_target}" ${OpenCV_LIBRARIES})
+
+install(TARGETS ydlidar_disp_sample DESTINATION lib/${PROJECT_NAME})
+
+####################################################################
+add_executable(move_sample src/move_sample.cpp)
+
+ament_target_dependencies(move_sample ${dependencies})
+
+target_link_libraries(move_sample "${cpp_typesupport_target}" )
+
+install(TARGETS move_sample DESTINATION lib/${PROJECT_NAME})
+
+###################################################################
+add_executable(camera_sub src/camera_sub.cpp)
+target_link_libraries(camera_sub
+  cv_bridge::cv_bridge
+  image_transport::image_transport
+  opencv_highgui
+  rclcpp::rclcpp
+)
+target_link_libraries(ydlidar_disp_sample ${OpenCV_LIBRARIES})
+install(TARGETS camera_sub DESTINATION lib/${PROJECT_NAME})
+###################################################################
+add_executable(3d_color_camera_sub src/3d_color_camera_sub.cpp)
+target_link_libraries(3d_color_camera_sub
+  cv_bridge::cv_bridge
+  image_transport::image_transport
+  opencv_highgui
+  rclcpp::rclcpp
+)
+install(TARGETS 3d_color_camera_sub DESTINATION lib/${PROJECT_NAME})
+###################################################################
+add_executable(3d_depth_camera_sub src/3d_depth_camera_sub.cpp)
+target_link_libraries(3d_depth_camera_sub
+  cv_bridge::cv_bridge
+  image_transport::image_transport
+  opencv_highgui
+  rclcpp::rclcpp
+)
+install(TARGETS 
+  3d_depth_camera_sub 
+  DESTINATION lib/${PROJECT_NAME}
+)
+###################################################################
+###################################################################
+add_executable(3d_ir_camera_sub src/3d_ir_camera_sub.cpp)
+target_link_libraries(3d_ir_camera_sub
+  cv_bridge::cv_bridge
+  image_transport::image_transport
+  opencv_highgui
+  rclcpp::rclcpp
+)
+install(TARGETS 
+  3d_ir_camera_sub 
+  DESTINATION lib/${PROJECT_NAME}
+)
+###################################################################
+
+
+
+install(DIRECTORY include/${PROJECT_NAME}/
+  DESTINATION include/${PROJECT_NAME}
+)
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rosidl_generator_cpp/
+  DESTINATION include/${PROJECT_NAME}
+)
+
+install(
+  DIRECTORY include/
+  DESTINATION /usr/local/include/studica_control
+)
+
+install(DIRECTORY
+  launch
+  DESTINATION share/${PROJECT_NAME}
+)
+
+install(DIRECTORY
+  config
+  DESTINATION share/${PROJECT_NAME}
+)
+
+ament_export_include_directories(include)
+ament_export_libraries(
+  cobra_component
+  dc_encoder_component
+  diff_drive_component
+  diff_drive_odometry
+  dio_component
+  encoder_component
+  imu_component
+  mecanum_drive_component
+  servo_component
+  sharp_component
+  titan_component
+  ultrasonic_component
+)
+ament_export_dependencies(${dependencies})
+
+set(CMAKE_INSTALL_RPATH "/usr/local/lib/studica_drivers")
+
+ament_package()
+
+####################################################################
+add_executable(tire_drive_node src/vmx_ros2_titan_drive.cpp)
+
+ament_target_dependencies(tire_drive_node ${dependencies})
+
+target_link_libraries(tire_drive_node
+/usr/local/lib/vmxpi/libvmxpi_hal_cpp.so
+/usr/local/lib/studica_drivers/libstudica_drivers.so
+"${cpp_typesupport_target}"
+)
+
+install(TARGETS tire_drive_node DESTINATION lib/${PROJECT_NAME})
+
+####################################################################
+add_executable(titan_port_test_node src/vmx_ros2_titan_drive.cpp)
+
+ament_target_dependencies(titan_port_test_node ${dependencies})
+
+target_link_libraries(titan_port_test_node
+/usr/local/lib/vmxpi/libvmxpi_hal_cpp.so
+/usr/local/lib/studica_drivers/libstudica_drivers.so
+)
+
+####################################################################
+add_executable(titan_can_id_scan_node src/vmx_ros2_titan_drive.cpp)
+
+ament_target_dependencies(titan_can_id_scan_node ${dependencies})
+
+target_link_libraries(titan_can_id_scan_node
+/usr/local/lib/vmxpi/libvmxpi_hal_cpp.so
+/usr/local/lib/studica_drivers/libstudica_drivers.so
+)
+
+####################################################################
+add_executable(titan_dance_node src/vmx_titan_dance.cpp)
+
+ament_target_dependencies(titan_dance_node ${dependencies})
+
+target_link_libraries(titan_dance_node
+/usr/local/lib/vmxpi/libvmxpi_hal_cpp.so
+/usr/local/lib/studica_drivers/libstudica_drivers.so
+)
+
+####################################################################
+add_executable(titan_keyboard_node src/vmx_titan_keyboard.cpp)
+
+ament_target_dependencies(titan_keyboard_node ${dependencies})
+
+target_link_libraries(titan_keyboard_node
+/usr/local/lib/vmxpi/libvmxpi_hal_cpp.so
+/usr/local/lib/studica_drivers/libstudica_drivers.so
+)
+
+
+####################################################################
+add_executable(wall_sensor_direct_node src/vmx_wall_sensor_direct.cpp)
+
+ament_target_dependencies(wall_sensor_direct_node ${dependencies})
+
+target_link_libraries(wall_sensor_direct_node
+/usr/local/lib/vmxpi/libvmxpi_hal_cpp.so
+/usr/local/lib/studica_drivers/libstudica_drivers.so
+)
+
+####################################################################
+add_executable(scan_wall_drive_node src/vmx_scan_wall_drive.cpp)
+
+ament_target_dependencies(scan_wall_drive_node ${dependencies})
+
+target_link_libraries(scan_wall_drive_node
+  /usr/local/lib/vmxpi/libvmxpi_hal_cpp.so
+  /usr/local/lib/studica_drivers/libstudica_drivers.so
+)
+
+install(TARGETS scan_wall_drive_node DESTINATION lib/${PROJECT_NAME})
+
+####################################################################
+add_executable(titan_forward_node src/vmx_titan_forward.cpp)
+
+ament_target_dependencies(titan_forward_node ${dependencies})
+
+target_link_libraries(titan_forward_node
+/usr/local/lib/vmxpi/libvmxpi_hal_cpp.so
+/usr/local/lib/studica_drivers/libstudica_drivers.so
+)
+
+####################################################################
+add_executable(titan_auto_motor_check_node src/vmx_titan_auto_motor_check.cpp)
+
+ament_target_dependencies(titan_auto_motor_check_node ${dependencies})
+
+target_link_libraries(titan_auto_motor_check_node
+/usr/local/lib/vmxpi/libvmxpi_hal_cpp.so
+/usr/local/lib/studica_drivers/libstudica_drivers.so
+)
+
+####################################################################
+add_executable(titan_drive_fixed_node src/vmx_titan_drive_fixed.cpp)
+
+ament_target_dependencies(titan_drive_fixed_node ${dependencies})
+
+target_link_libraries(titan_drive_fixed_node
+/usr/local/lib/vmxpi/libvmxpi_hal_cpp.so
+/usr/local/lib/studica_drivers/libstudica_drivers.so
+)
+
+
+####################################################################
+add_executable(titan_drive_class_node src/vmx_titan_drive_class.cpp)
+
+ament_target_dependencies(titan_drive_class_node ${dependencies})
+
+target_link_libraries(titan_drive_class_node
+  /usr/local/lib/vmxpi/libvmxpi_hal_cpp.so
+  /usr/local/lib/studica_drivers/libstudica_drivers.so
+)
+
+install(TARGETS titan_drive_class_node DESTINATION lib/${PROJECT_NAME})
+
+####################################################################
+add_executable(wall_front_180_run_node src/vmx_wall_front_180_run.cpp)
+
+ament_target_dependencies(wall_front_180_run_node ${dependencies})
+
+target_link_libraries(wall_front_180_run_node
+  /usr/local/lib/vmxpi/libvmxpi_hal_cpp.so
+  /usr/local/lib/studica_drivers/libstudica_drivers.so
+)
+
+install(TARGETS wall_front_180_run_node DESTINATION lib/${PROJECT_NAME})
+
+####################################################################
+add_executable(titan_encoder_drive_node src/vmx_titan_encoder_drive_main.cpp src/encoder_drive.cpp)
+
+ament_target_dependencies(titan_encoder_drive_node ${dependencies})
+
+target_link_libraries(titan_encoder_drive_node
+  /usr/local/lib/vmxpi/libvmxpi_hal_cpp.so
+  /usr/local/lib/studica_drivers/libstudica_drivers.so
+)
+
+install(TARGETS titan_encoder_drive_node DESTINATION lib/${PROJECT_NAME})
+
+####################################################################
+add_executable(encoder_obstacle_turn_node
+  src/encoder_obstacle_turn.cpp
+  src/encoder_drive.cpp)
+
+ament_target_dependencies(encoder_obstacle_turn_node ${dependencies})
+
+target_link_libraries(encoder_obstacle_turn_node
+  /usr/local/lib/vmxpi/libvmxpi_hal_cpp.so
+  /usr/local/lib/studica_drivers/libstudica_drivers.so
+)
+
+install(TARGETS encoder_obstacle_turn_node DESTINATION lib/${PROJECT_NAME})
+
+####################################################################
+add_executable(encoderma_node
+  src/encoder_main.cpp
+  src/Encoder.cpp)
+
+ament_target_dependencies(encoderma_node ${dependencies})
+
+target_link_libraries(encoderma_node
+  /usr/local/lib/vmxpi/libvmxpi_hal_cpp.so
+  /usr/local/lib/studica_drivers/libstudica_drivers.so
+)
+
+install(TARGETS encoderma_node DESTINATION lib/${PROJECT_NAME})
+
+####################################################################
+add_executable(arm_up_slow_node src/vmx_arm_up_slow.cpp)
+
+ament_target_dependencies(arm_up_slow_node ${dependencies})
+
+target_link_libraries(arm_up_slow_node
+/usr/local/lib/vmxpi/libvmxpi_hal_cpp.so
+/usr/local/lib/studica_drivers/libstudica_drivers.so
+)
