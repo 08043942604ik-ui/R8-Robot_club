@@ -3,21 +3,20 @@ constexpr int plus;//a
 constexpr bool xory;//x or y判断
 constexpr double  x = 0.0;
 constexpr double  y = 0.0;
-constexpr double count = 0.0;を初期化
+constexpr double count = 0.0;
 constexpr bool once = false;
 constexpr bool first = false;
 } //ヘッダで定義
 
 int GetDegree-man {
-if(motorturn()) {
 
-if(Mrun//モーターがtrueを返せばtrueになる変数) {
+if(Mrun/*モーターがtrueを返せばtrueになる変数*/) {
 count = TotalDistance - //ここにmotorturnが始まる前の総移動距離;
 
 Kakudo = Kakudo + GetDegree(count);
 
 
-Mrun = false; //最後にfalseを返す}return Kakudo;}
+Mrun = false; //最後にfalseを返す}return Kakudo;
 }
 
 }
@@ -38,7 +37,7 @@ int IncreaseAxis(int degrees) {
 
 if(once) {
 int deg = degrees;
-once = false
+once = false;
 
 }//最初だけやること
 
@@ -53,7 +52,7 @@ auto yPa = (TotalDistance - x)
 if(deg = 90) {
 
 xory = false;
-x = (TotalDistance - y)
+x = (TotalDistance - y);
 auto xPa = (TotalDistance - y);
 
 }//90
@@ -82,4 +81,6 @@ if(Kakudo >= 360) {
 Dptr = &Kakudo;
 *Dptr -= 360;
 }
+if(Kakudo < 360)
+break;
 } //GetDegree-manの中に入れとく
