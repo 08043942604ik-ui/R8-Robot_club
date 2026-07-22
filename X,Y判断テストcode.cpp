@@ -94,14 +94,14 @@ xPa = (TotalDistance - y);
 if(deg == 180) {
 
 xory = true;
-y -= ((TotalDistance - x) - yPa);
+y -= (TotalDistance - yPa);
 
 } //180
 
 if(deg == 270) {
 
 xory = false;
-x -= ((TotalDistance - y) - xPa);
+x -= (TotalDistance - xPa);
 
 }//270
 
