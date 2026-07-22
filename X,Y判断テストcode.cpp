@@ -1,30 +1,55 @@
+#include "Enxcoder.h"
+#include <cmath>
+
+
 namespace {
-constexpr int plus;//a
-constexpr bool xory;//x or y判断
-constexpr double  x = 0.0;
-constexpr double  y = 0.0;
-constexpr double count = 0.0;
-constexpr bool once = false;
-constexpr bool first = false;
+
+int plus; //a
+bool xory; //x or y判断
+double  x = 0.0;
+double  y = 0.0;
+double count = 0.0;
+bool once = false;
+bool first = false;
+int Kakudo = 0;
+int* Dptr = nullptr;
+double yPa = 0.0;
+double xPa = 0.0;
+int deg = 0;   
+double hypotenuse = 0.0;
+double DFH = 0.0;
+int AbsDegree = 0;
+int turndeg = 0;
+int result = 0;
+    
 } //ヘッダで定義
 
-int GetDegree-man {
+int GetDegree_man() {
 
-if(Mrun/*モーターがtrueを返せばtrueになる変数*/) {
-count = TotalDistance - //ここにmotorturnが始まる前の総移動距離;
+if(Mrun){
+
+count = TotalDistance;　//これとモーターが回転する前の移動距離の値と引く
 
 Kakudo = Kakudo + GetDegree(count);
 
 
-Mrun = false; //最後にfalseを返す
+Mrun = false;
+
+while(Kakudo >= 360) {
+if(Kakudo >= 360) {
+
+Dptr = &Kakudo;
+*Dptr -= 360;
+}
+
+}//while end
+
 }
 
 return Kakudo;
-}
 
+} //GetDegree_man,Endほんまはifの中もっとあるけど今書いてない
 
-
-}//GetDegree-man,End
 double GetDegree() {
 //ここで90°回ったら進む距離で割る.例えば90°で約100mm進むならint ad = count / 100;  
 
@@ -40,51 +65,63 @@ return ad * 90;
 int IncreaseAxis(int degrees) {
 
 if(once) {
-int deg = degrees;
+deg = degrees;
 once = false;
 
 }//最初だけやること
 
-if(deg = 0) {
+if(deg == 0) {
 
 xory = true;
 y = (TotalDistance - x); 
-auto yPa = (TotalDistance - x)
+yPa = (TotalDistance - x)
 
 } //0
 
-if(deg = 90) {
+if(deg == 90) {
 
 xory = false;
 x = (TotalDistance - y);
-auto xPa = (TotalDistance - y);
+xPa = (TotalDistance - y);
 
 }//90
 
-if(deg = 180) {
+if(deg == 180) {
 
 xory = true;
 y -= ((TotalDistance - x) - yPa);
 
 } //180
 
-if(deg = 270) {
+if(deg == 270) {
 
-xory = true;
+xory = false;
 x -= ((TotalDistance - y) - xPa);
 
 }//270
 
+return {x, y} //あっち側でXoC = XoC + coordinate[1];みたいなことをする  
 }//IncreaseAxis
 
-//もし360を超えた時
+double returnToOrigin(double Xe, double Ye) {
 
-while(Kakudo >= 360) {
-if(Kakudo >= 360) {
+hypotenuse = std::sqrt((Xe * Xe) + (Ye * Ye)); //三平方の定理で斜辺の長さを求める
+DFH = atan2(Ye, Xe);//θを求める
 
-Dptr = &Kakudo;
-*Dptr -= 360;
+AbsDegree = std::round(DFH);//四捨五入する
+
+turndeg = 180 - (90 + AbsDegree); //まだθと90を足すことで角度を求める
+
+if(Xe < 0) {
+result = 360 - turndeg;
+
+return result;
 }
-if(Kakudo < 360)
-break;
-} //GetDegree-manの中に入れとく
+
+if(Xe > 0) {
+
+
+return result;
+}
+
+}//retunrToOrigin終わり
