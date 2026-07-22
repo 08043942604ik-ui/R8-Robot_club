@@ -79,7 +79,7 @@ if(deg == 0) {
 
 xory = true;
 y = (TotalDistance - x); 
-yPa = (TotalDistance - x)
+yPa = (TotalDistance - x);
 
 } //0
 
