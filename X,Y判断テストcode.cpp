@@ -79,7 +79,7 @@ if(deg == 0) {
 
 xory = true;
 y = (TotalDistance - x); 
-yPa = (TotalDistance);
+yPa = TotalDistance;
 
 } //0
 
@@ -87,7 +87,7 @@ if(deg == 90) {
 
 xory = false;
 x = (TotalDistance - y);
-xPa = (TotalDistance - y);
+xPa = TotalDistance;
 
 }//90
 
