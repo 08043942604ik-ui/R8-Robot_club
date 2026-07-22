@@ -21,7 +21,12 @@ double DFH = 0.0;
 int AbsDegree = 0;
 int turndeg = 0;
 int result = 0;
-    
+int GetDegree_man();
+double GetDegree();
+int IncreaseAxis();
+double returnToOrigin();
+
+
 } //ヘッダで定義
 
 int GetDegree_man() {
@@ -51,7 +56,7 @@ return Kakudo;
 } //GetDegree_man,Endほんまはifの中もっとあるけど今書いてない
 
 double GetDegree() {
-//ここで90°回ったら進む距離で割る.例えば90°で約100mm進むならint ad = count / 100;  
+//ここで90°回ったら進む距離で割る.例えば90°で約100mm進むならint ad = count / 100;
 
 count = 0;
 once = true; //increaseAxisで最初にやる処理のため
@@ -100,7 +105,7 @@ x -= ((TotalDistance - y) - xPa);
 
 }//270
 
-return {x, y} //あっち側でXoC = XoC + coordinate[1];みたいなことをする  
+return {x, y};//あっち側でXoC = XoC + coordinate[1];みたいなことをする  
 }//IncreaseAxis
 
 double returnToOrigin(double Xe, double Ye) {
