@@ -197,3 +197,103 @@ return 3;
 }//AverageChecker,end
 
 
+
+
+
+//ここから下はAIにちょっと修正してもらったやつ
+
+include <array>
+#include <cmath>
+
+namespace {
+
+bool once = true;
+
+double x = 0.0;
+double y = 0.0;
+
+double Cx = 0.0;
+double Cy = 0.0;
+double xyPa = 0.0;  // 直進開始時の総走行距離
+
+int Kakudo = 0;     // 現在の向き：0, 90, 180, 270
+
+constexpr double kPi = 3.141592653589793;
+
+// 角度を 0 ～ 359 にそろえる
+int NormalizeDegree(int degree) {
+  degree %= 360;
+
+  if (degree < 0) {
+    degree += 360;
+  }
+
+  return degree;
+}
+
+// 回転終了時に呼ぶ。
+// right_turn=true: 右回転、false: 左回転
+int GetDegree_man(bool Mrun, bool right_turn, int turn_degrees) {
+  if (!Mrun) {
+    return Kakudo;
+  }
+
+  if (right_turn) {
+    Kakudo += turn_degrees;
+  } else {
+    Kakudo -= turn_degrees;
+  }
+
+  Kakudo = NormalizeDegree(Kakudo);
+
+  // 次の直進開始時に距離の基準を取り直す
+  once = true;
+
+  return Kakudo;
+}
+
+// TotalDistanceを使って現在のx・yを更新する。
+// 0度:+y、90度:+x、180度:-y、270度:-x
+std::array<double, 2> IncreaseAxis(double TotalDistance) {
+  if (once) {
+    Cx = x;
+    Cy = y;
+    xyPa = TotalDistance;
+    once = false;
+  }
+
+  const double distance = TotalDistance - xyPa;
+
+  if (Kakudo == 0) {
+    y = Cy + distance;
+
+  } else if (Kakudo == 90) {
+    x = Cx + distance;
+
+  } else if (Kakudo == 180) {
+    y = Cy - distance;
+
+  } else if (Kakudo == 270) {
+    x = Cx - distance;
+  }
+
+  return {x, y};
+}
+
+// 原点へ戻る方向を返す
+int returnToOrigin(double Xe, double Ye) {
+  const double radian = std::atan2(-Xe, -Ye);
+  const double degree = radian * 180.0 / kPi;
+
+  const int rounded_degree =
+      static_cast<int>(std::round(degree / 90.0)) * 90;
+
+  return NormalizeDegree(rounded_degree);
+}
+
+// 原点までの距離
+double DistanceToOrigin(double Xe, double Ye) {
+  return std::sqrt(Xe * Xe + Ye * Ye);
+}
+
+}  // namespace
