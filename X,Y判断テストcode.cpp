@@ -74,6 +74,7 @@ once = false;
 
 }//最初だけやること
 
+Rightcase {
 if(deg == 0) {
 
 xory = true;
@@ -107,6 +108,45 @@ x = Cx - (TotalDistance - xyPa);
 
 xyPa = TotalDistance;
 }//270
+
+}//右回りの場合
+
+leftcase {
+if(deg == 0) {
+
+xory = true;
+y = (TotalDistance - x); 
+Cy = (TotalDistance - x); //yノクローン、yをマイナスする仕組みを作るために
+xyPa = TotalDistance;
+
+} //0
+
+else if(deg == 90) {
+
+xory = false;
+x = Cx - (TotalDistance - xyPa);
+
+xyPa = TotalDistance;
+}//90
+
+else if(deg == 180) {
+
+xory = true;
+y = Cy - (TotalDistance - xyPa);
+xyPa = TotalDistance;
+  
+} //180
+
+else if(deg == 270) {
+
+xory = false;
+x = (TotalDistance - y);
+Cx = (TotalDistance - y); //xのクローン
+xyPa = TotalDistance;
+  
+}//270
+
+}//左回りの場合
 
 return {x, y};//あっち側でXoC = XoC + coordinate[1];みたいなことをする  
 }//IncreaseAxis
