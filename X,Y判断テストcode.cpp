@@ -25,9 +25,10 @@ int GetDegree_man();
 double GetDegree();
 int IncreaseAxis();
 double returnToOrigin();
+double Cx = 0.0;
+double Cy = 0.0;
 
-
-} //ヘッダで定義
+} //クラス内で定義
 
 int GetDegree_man() {
 
@@ -50,13 +51,18 @@ Dptr = &Kakudo;
 }//while end
 
 }
-if(Kakudo)
+if(Kakudo == 180) {
+yPa = 0;
+
+}
+
+if(Kakudo == 270) {
 
 
-
+  
+}
 
 return Kakudo;
-
 } //GetDegree_man,Endほんまはifの中もっとあるけど今書いてない
 
 double GetDegree() {
@@ -83,6 +89,7 @@ if(deg == 0) {
 
 xory = true;
 y = (TotalDistance - x); 
+Cy = (TotalDistance - x); //yノクローン、yをマイナスする仕組みを作るために
 yPa = TotalDistance;
 
 } //0
@@ -91,6 +98,7 @@ if(deg == 90) {
 
 xory = false;
 x = (TotalDistance - y);
+Cx = (TotalDistance - y); //xのクローン
 xPa = TotalDistance;
 
 }//90
@@ -98,14 +106,14 @@ xPa = TotalDistance;
 if(deg == 180) {
 
 xory = true;
-y -= (TotalDistance - yPa);
+y = Cy - (TotalDistance - yPa);
 
 } //180
 
 if(deg == 270) {
 
 xory = false;
-x -= (TotalDistance - xPa);
+x = Cx - (TotalDistance - xPa);
 
 }//270
 
