@@ -50,6 +50,10 @@ Dptr = &Kakudo;
 }//while end
 
 }
+if(Kakudo)
+
+
+
 
 return Kakudo;
 
