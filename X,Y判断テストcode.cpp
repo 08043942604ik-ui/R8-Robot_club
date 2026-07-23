@@ -90,7 +90,7 @@ if(deg == 0) {
 xory = true;
 y = (TotalDistance - x); 
 Cy = (TotalDistance - x); //yノクローン、yをマイナスする仕組みを作るために
-yPa = TotalDistance;
+xyPa = TotalDistance;
 
 } //0
 
@@ -99,21 +99,21 @@ if(deg == 90) {
 xory = false;
 x = (TotalDistance - y);
 Cx = (TotalDistance - y); //xのクローン
-xPa = TotalDistance;
+xyPa = TotalDistance;
 
 }//90
 
 if(deg == 180) {
 
 xory = true;
-y = Cy - (TotalDistance - yPa);
+y = Cy - (TotalDistance - xyPa);
 
 } //180
 
 if(deg == 270) {
 
 xory = false;
-x = Cx - (TotalDistance - xPa);
+x = Cx - (TotalDistance - xyPa);
 
 }//270
 
