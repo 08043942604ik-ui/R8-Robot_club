@@ -4,35 +4,34 @@
 
 namespace {
 
-int plus; //a
 bool xory; //x or y判断
-double  x = 0.0;
-double  y = 0.0;
-double count = 0.0;
-bool once = false;
-bool first = false;
-int Kakudo = 0;
-int* Dptr = nullptr;
-double yPa = 0.0;
-double xPa = 0.0;
-int deg = 0;   
-double hypotenuse = 0.0;
-double DFH = 0.0;
-int AbsDegree = 0;
-int turndeg = 0;
-int result = 0;
-int GetDegree_man();
-double GetDegree();
-int IncreaseAxis();
-double returnToOrigin();
-double Cx = 0.0;
+double  x = 0.0;　//x座標
+double  y = 0.0; //y座標
+double count = 0.0; //走行距離
+bool once = false; //IncreaseAxisの最初だけ処理したいやつをやるため
+int Kakudo = 0; //どのくらいの角度回ったか
+int* Dptr = nullptr; 
+int deg = 0; //degreeを短くしたやつ
+double hypotenuse = 0.0; //斜辺の長さ
+double DFH = 0.0; //θ
+int AbsDegree = 0; //θの値を四捨五入した値
+int turndeg = 0; //ロボットが回転する角度
+int result = 0; //結果
+int GetDegree_man(); //角度を送る関数
+double GetDegree(); //エンコーダーの回ってる時の走行距離を使って角度を求める関数
+int IncreaseAxis(); //ロボットの位置のx,yの座標を送る関数
+double returnToOrigin(); //原点に帰るための値を求めて送る関数
+double Cx = 0.0; 
 double Cy = 0.0;
+int add = 0; //90にかける値
+double AChecker(); //addの値を決める関数
+
 
 } //クラス内で定義
 
 int GetDegree_man() {
 
-if(Mrun){
+if(Mrun/*これは機体が回ったときにtrueになる*/){
 
 count = TotalDistance;　//これとモーターが回転する前の移動距離の値と引く
 
@@ -48,31 +47,21 @@ Dptr = &Kakudo;
 *Dptr -= 360;
 }
 
-}//while end
-
-}
-if(Kakudo == 180) {
-yPa = 0;
-
-}
-
-if(Kakudo == 270) {
+}//これはKakudoは溜まってくから360を超えたらリセット
 
 
-  
 }
 
 return Kakudo;
 } //GetDegree_man,Endほんまはifの中もっとあるけど今書いてない
 
 double GetDegree() {
-//ここで90°回ったら進む距離で割る.例えば90°で約100mm進むならint ad = count / 100;
+add = AChecker();
 
 count = 0;
 once = true; //increaseAxisで最初にやる処理のため
-first = true;
 
-return ad * 90;
+return add * 90;
 } //GetDegree終わり
 
 //ほんでKakudoの値をIncreaseAxis引数に入れて
@@ -94,7 +83,7 @@ xyPa = TotalDistance;
 
 } //0
 
-if(deg == 90) {
+else if(deg == 90) {
 
 xory = false;
 x = (TotalDistance - y);
@@ -103,18 +92,20 @@ xyPa = TotalDistance;
 
 }//90
 
-if(deg == 180) {
+else if(deg == 180) {
 
 xory = true;
 y = Cy - (TotalDistance - xyPa);
-
+xyPa = TotalDistance;
+  
 } //180
 
-if(deg == 270) {
+else if(deg == 270) {
 
 xory = false;
 x = Cx - (TotalDistance - xyPa);
 
+xyPa = TotalDistance;
 }//270
 
 return {x, y};//あっち側でXoC = XoC + coordinate[1];みたいなことをする  
@@ -142,3 +133,30 @@ return result;
 }
 
 }//retunrToOrigin終わり
+
+double AverageChecker(double dd) {
+for(int g = 1; g < 4; g++) {
+int k = 0;
+
+k = dd / g;
+
+if(g = 1 && 11 <= k <= 12) {
+
+return 1;
+}
+
+else if(g = 2 && 11 <= k <= 12) {
+
+return 2;
+}
+
+else if(g = 3 && 11 <= k <= 12) {
+
+return 3;
+}
+
+}//for,end
+
+}//AverageChecker,end
+
+
