@@ -460,7 +460,7 @@ std::array<double, 2> IncreaseAxis(int degrees);
 int returnToOrigin(double Xe, double Ye);
 int AverageChecker(double dd);
 int RobotMovement();
-double turnDistanceChecker();//totalの距離と引く数を取るため
+bool RobotTurn();
     
 } // namespace
 
