@@ -594,13 +594,12 @@ if(x > -600 && x < -650) {
 if(y > 0 && y < 50){
 
 
-
 if(times == 0) {
     
 if(turnrunning == false) {
 leftmotor.SetSpeed(0.0);
 rightmotor.SetSpeed(0.0);
-line = Totaldistance + 11.775;
+line = Totaldistance + 35.325;
 wastedist += RobotTurn(times);
 
     
@@ -744,10 +743,9 @@ std::this_thread::sleep_for(std::chrono::milliseconds(40));
 return true;//murnに入れる
 }
 
-bool RobotTurn(int d) {
+double RobotTurn(int w) {
 //色によって変わるが例えば赤
 switch(d) {
-case 0:
 case 2:
 case 3:
 case 5:
@@ -770,16 +768,16 @@ float d = 0; //一回だけ
     SetSpeed(leftmotor, 0.0);
     SetSpeed(rightmotor, 0.0);
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(100)); //endをtrueにしてから処理する時間を
+
     
     turnrunning = false;
-    break;
+    return 11.775; 
 }
 
         
 }//while,end
 
-return 11.775; 
+
     
 case 1:
 case 4:
@@ -805,12 +803,12 @@ float d = 0;
 
     
     turnrunning = false;
-    break;
+    return 23.55;
 }
-return 23.55;
+
 
 }//while,end
-default : 
+case 0: 
    turnrunning = true;
 float d = 0;
     while(true) {     
@@ -825,11 +823,11 @@ float d = 0;
     if(totaldistance == line) {
     SetSpeed(leftmotor, 0.0);
     SetSpeed(rightmotor, 0.0);
-    end = true;
-    std::this_thread::sleep_for(std::chrono::milliseconds(100)); 
+    
     
     turnrunning = false;
-    break;
+    return 35.325;
+    
 }
 }//while,end
 
