@@ -598,9 +598,9 @@ if(y > 0 && y < 50){
 if(times == 0) {
     
 if(turnrunning == false) {
-line = Totaldistance + 11.775;
 leftmotor.SetSpeed(0.0);
 rightmotor.SetSpeed(0.0);
+line = Totaldistance + 11.775;
 wastedist += RobotTurn(times);
 
     
@@ -618,10 +618,9 @@ else if(y > 1500 && y < 1550) {
 
 if(times == 1) {
 if(turnrunning == false) {
-line = Totaldistance + 23.55
 leftmotor.SetSpeed(0.0);
 rightmotor.SetSpeed(0.0);
-
+line = Totaldistance + 23.55
 wastedist += RobotTurn(times);
 
 std::this_thread::sleep_for(std::chrono::milliseconds(40));
@@ -636,9 +635,9 @@ else if(y > 900 && y < 950){
 if(times == 2) {
     
 if(turnrunning == false) {
-line = Totaldistance + 11.775;
 leftmotor.SetSpeed(0.0);
 rightmotor.SetSpeed(0.0);
+line = Totaldistance + 11.775;
 wastedist += RobotTurn(times);
 
     
@@ -661,9 +660,9 @@ if(y > 900 && y < 950) {
 if(times == 3 && times == 5) {
 if(turnrunning == false) {
 
-line = Totaldistance + 11.775;
 leftmotor.SetSpeed(0.0);
 rightmotor.SetSpeed(0.0);
+line = Totaldistance + 11.775;
 wastedist += RobotTurn(times);
 std::this_thread::sleep_for(std::chrono::milliseconds(40));
     
@@ -678,9 +677,10 @@ else if(y > 1500 && y < 1550){
 
 if(times == 4) {
 if(turnrunning == false) {
-line = Totaldistance + 23.55
+
 leftmotor.SetSpeed(0.0);
 rightmotor.SetSpeed(0.0);
+line = Totaldistance + 23.55
 wastedist += RobotTurn(times);
 
 std::this_thread::sleep_for(std::chrono::milliseconds(40));
@@ -702,9 +702,9 @@ if(y > 900 && y < 950) {
 if(times == 6) {
 if(turnrunning == false) {
 
-line = Totaldistance + 11.775;
 leftmotor.SetSpeed(0.0);
 rightmotor.SetSpeed(0.0);
+line = Totaldistance + 11.775;
 wastedist += RobotTurn(times);
 
 std::this_thread::sleep_for(std::chrono::milliseconds(40));
@@ -719,9 +719,10 @@ else if(y > 1500 && y < 1550){
 
 if(times == 7) {
 if(turnrunning == false) {
-line = Totaldistance + 23.55
+
 leftmotor.SetSpeed(0.0);
 rightmotor.SetSpeed(0.0);
+line = Totaldistance + 23.55
 wastedist += RobotTurn(times);
 
 std::this_thread::sleep_for(std::chrono::milliseconds(40));
