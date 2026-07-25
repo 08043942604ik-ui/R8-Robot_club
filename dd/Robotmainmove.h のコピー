@@ -1,0 +1,39 @@
+#include "rclcpp/rclcpp.hpp"
+#include "robotdrive.h"
+#include "Encoder.h"
+
+class Robotmain : public rclcpp::Node {
+public:
+    Robotmain() : Node("robot_control") {
+        
+        // グループA内は絶対に二重起動しない
+        auto encoder_group = this->create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
+        // グループB内も絶対に二重起動しない
+        auto drive_group = this->create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
+
+
+        encoder_timer_ = this->create_wall_timer(
+            std::chrono::milliseconds(10),
+            std::bind(&RobotControlNode::encoder_callback, this),
+            encoder_group
+        );
+
+        drive_timer_ = this->create_wall_timer(
+            std::chrono::milliseconds(20),
+            std::bind(&RobotControlNode::drive_callback, this),
+            drive_group
+        );
+    }
+
+private:
+    void encoder_callback() {
+     Encoderma::callback(); 
+    }
+
+    void drive_callback() {
+        RobotDrive::callback();
+    }
+
+    rclcpp::TimerBase::SharedPtr encoder_timer_;
+    rclcpp::TimerBase::SharedPtr drive_timer_;
+};

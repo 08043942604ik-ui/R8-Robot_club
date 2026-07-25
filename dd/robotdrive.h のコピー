@@ -1,0 +1,40 @@
+#include "titan.h"
+#include <chrono>
+#include <thread>
+#include "Encoder.h"
+#include <array>
+#include <cmath>
+#include <atomic>
+
+class RobotDrive : public rclcpp::Node {
+public :
+
+RobotDrive();
+~RobotDrive() override;
+
+int GetDegree_man();
+int GetDegree(double turnDistance);
+std::array<double, 2> IncreaseAxis(int degrees);
+int returnToOrigin(double Xe, double Ye);
+int AverageChecker(double dd);
+int RobotMovement();
+double turnDistanceChecker();//totalの距離と引く数を取るため
+void callback();
+
+private :
+Encoderma& encoders_;
+
+ rclcpp::TimerBase::SharedPtr timer_; //受け取る側を合わせるため
+
+std::array<double, 2> Xof = 0; 
+std::atomic<bool> turnrunning{false}; 
+std::atomic<double> wastedist{11.775};
+double Cx = 0.0;          // 区間開始時のx座標
+double Cy = 0.0;          // 区間開始時のy座標
+
+double x = 0.0;            // x座標
+double y = 0.0;            // y座標
+
+int delivery = 0;//運び屋
+int set = 1;//セットスピード,0にならないと動かない色読んで、左に90°回ってから0になる
+};
