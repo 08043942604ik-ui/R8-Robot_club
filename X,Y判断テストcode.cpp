@@ -25,7 +25,6 @@ int result = 0;           // 結果
 double Cx = 0.0;          // 区間開始時のx座標
 double Cy = 0.0;          // 区間開始時のy座標
 int add = 0;              // 90度を何回分回ったか
-int times = 0; //何回目か
 bool turnrunning = false; //機体が回転中か
 int times = 0;//何回機体が回転してるか
 bool timer = true; //タイマースタートを一回にするため
@@ -166,7 +165,7 @@ int AverageChecker(double dd)
   return 0;
 }
 
-int RobotMovement() {
+bool RobotMovement() {
 
 RealDistance = Totaldistance - TotalTdistance;
  
@@ -441,7 +440,6 @@ int result = 0;           // 結果
 double Cx = 0.0;          // 区間開始時のx座標
 double Cy = 0.0;          // 区間開始時のy座標
 int add = 0;              // 90度を何回分回ったか
-int times = 0; //何回目か
 bool turnrunning = false; //機体が回転中か
 int times = 0;//何回機体が回転してるか
 bool timer = true; //タイマースタートを一回にするため
@@ -586,7 +584,7 @@ int AverageChecker(double dd)
   return 0;
 }
 
-int RobotMovement() {
+bool RobotMovement() {
 
  
 if(x > -600 && x < -650) {
@@ -619,7 +617,7 @@ if(times == 1) {
 if(turnrunning == false) {
 leftmotor.SetSpeed(0.0);
 rightmotor.SetSpeed(0.0);
-line = Totaldistance + 23.55
+line = Totaldistance + 23.55;
 wastedist += RobotTurn(times);
 
 std::this_thread::sleep_for(std::chrono::milliseconds(40));
@@ -679,7 +677,7 @@ if(turnrunning == false) {
 
 leftmotor.SetSpeed(0.0);
 rightmotor.SetSpeed(0.0);
-line = Totaldistance + 23.55
+line = Totaldistance + 23.55;
 wastedist += RobotTurn(times);
 
 std::this_thread::sleep_for(std::chrono::milliseconds(40));
@@ -721,7 +719,7 @@ if(turnrunning == false) {
 
 leftmotor.SetSpeed(0.0);
 rightmotor.SetSpeed(0.0);
-line = Totaldistance + 23.55
+line = Totaldistance + 23.55;
 wastedist += RobotTurn(times);
 
 std::this_thread::sleep_for(std::chrono::milliseconds(40));
@@ -796,7 +794,7 @@ float d = 0;
 }
  
     
-    if(totaldistance == line)) {
+    if(totaldistance == line) {
     SetSpeed(leftmotor, 0.0);
     SetSpeed(rightmotor, 0.0);
 
