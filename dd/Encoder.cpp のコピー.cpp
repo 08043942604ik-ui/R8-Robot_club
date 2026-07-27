@@ -25,7 +25,7 @@ constexpr double kDistancePerTickM =
 
 }  // namespace
 
-Encoderma::Encoderma() : Node("studicaTiEC") {
+Encoderma::Encoderma() {
   // VMXを50Hzで初期化
   vmx_ = std::make_shared<VMXPi>(true, 50);
   if (!vmx_->IsOpen()) {
