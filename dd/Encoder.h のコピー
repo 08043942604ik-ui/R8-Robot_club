@@ -23,10 +23,10 @@ class Encoderma : public rclcpp::Node {
 
   // 全モーターを停止する
   void StopAll();
-
+  void stopAll();
 
   // 20msごとに呼ばれ、60秒後の停止と値の表示を行う
-  void callback();
+  static void callback();
 
  private:
   std::shared_ptr<VMXPi> vmx_;
