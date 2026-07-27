@@ -38,7 +38,7 @@ encoders_.StopAll();
 
 RobotDrive::~RobotDrive() {
 
-encoders_.StopAll();    
+encoders_.stopAll();    
 }
 
 
