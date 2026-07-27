@@ -59,7 +59,11 @@ Encoderma::Encoderma() {
 Encoderma::~Encoderma() {
   StopAll();
 }
-
+void Encoderma::stopAll() {
+  for (int motor = 0; motor < 4; ++motor) {
+    titan_->SetSpeed(static_cast<uint8_t>(motor), 0.0);
+  }
+}
 
 void Encoderma::setSpeed(uint8_t motor, double speed) {
     titan_->SetSpeed(motor, speed);
