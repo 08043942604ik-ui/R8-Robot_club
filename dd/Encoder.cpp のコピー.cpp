@@ -88,6 +88,7 @@ void Encoderma::StopAll() {
 
 void Encoderma::callback() {
 
+try {
 
 auto distance = RLDistance();
 
@@ -98,4 +99,16 @@ auto distance = RLDistance();
   TotalDistance += (left_delta + right_delta) / 2.0;
 
   RCLCPP_INFO(get_logger(), "左:%.3fm 右:%.3fm 合計:%.3fm", distance[0], distance[1], TotalDistance);
+
+
+
+}
+catch(const std::exception& error) {
+
+RCLCPP_ERROR(this->get_logger(), "エラーが発生しました %s", error.what());
+
+    
+}
+
+
 }
