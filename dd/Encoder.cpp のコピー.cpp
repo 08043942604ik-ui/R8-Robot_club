@@ -1,5 +1,5 @@
 #include "Encoder.h"
-
+#include <stdexcept>
 #include <chrono>
 #include <cmath>
 
