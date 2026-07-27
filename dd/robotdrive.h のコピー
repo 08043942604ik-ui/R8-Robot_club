@@ -4,7 +4,7 @@
 #include "Encoder.h"
 #include <array>
 #include <cmath>
-#include <atomic>
+#include <atomic>　//分割されないように一塊にするため
 
 class RobotDrive : public rclcpp::Node {
 public :
