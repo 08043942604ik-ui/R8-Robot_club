@@ -98,9 +98,7 @@ int RobotDrive::GetDegree(double turnDistance)
 
 std::array<double, 2> RobotDrive::IncreaseAxis(int degrees)
 {
-if(TheBeginning == false) {
-    
-if(turnrunning == false) { 
+     
 // 旋回直後、最初の一回だけ基準位置と基準距離を保存
   if (once) {
     deg = degrees;
@@ -132,8 +130,8 @@ if(turnrunning == false) {
   }
 
   return {x, y};
-}
-}
+
+
 
 }//IncreaseAxis,END
 
@@ -557,13 +555,16 @@ encoders_.setSpeed(2, 0.5)
 set = 1;
 }
 
+if(TheBeginning == false) {
     
+if(turnrunning == false) {     
 Marn = RobotMovement();
 
 delivery = GetDegree_man();
 
 Xof = IncreaseAxis(delivery);
-
+}
+}
 RCLCPP_INFO(get_logger(), "x座標 %.2f : y座標 %.2f", Xof[0], Xof[1]);
 
 
