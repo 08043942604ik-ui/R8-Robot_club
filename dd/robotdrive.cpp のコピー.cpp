@@ -1,5 +1,6 @@
 #include <cmath>
 #include "robotdrive.h"
+#include <stdexcept>
 
 namespace
 {
@@ -542,6 +543,9 @@ return result_dist;
 }//RobotTurn終わり
 
 void RobotDrive::callback() {
+
+try {
+  
 if(begin) {
 
 The Beginning();
@@ -567,6 +571,11 @@ Xof = IncreaseAxis(delivery);
 }
 RCLCPP_INFO(get_logger(), "x座標 %.2f : y座標 %.2f", Xof[0], Xof[1]);
 
+}
+catch(const std::exception& errorD) {
+
+RCLCPP_ERROR(this->get_logger(), "エラーが発生しました %s", errorD.what());
+}
 
 }
 
