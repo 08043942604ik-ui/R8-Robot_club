@@ -5,7 +5,7 @@
 class Robotmain : public rclcpp::Node {
 public:
     Robotmain() : Node("robot_control") {
-        
+        //nodeの名前をつけるのはここだけで良いサブスクライバーだけ違えば後はオッケ
         // グループA内は絶対に二重起動しない
         auto encoder_group = this->create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
         // グループB内も絶対に二重起動しない
