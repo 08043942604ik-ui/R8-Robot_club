@@ -31,6 +31,8 @@ std::atomic<bool> turnrunning{false};
 std::atomic<double> wastedist{11.775};
 double Cx = 0.0;          // 区間開始時のx座標
 double Cy = 0.0;          // 区間開始時のy座標
+std::atomic<int> times{0};
+std::thread Turna_thread;
 
 double x = 0.0;            // x座標
 double y = 0.0;            // y座標
