@@ -14,26 +14,19 @@ public:
 
         encoder_timer_ = this->create_wall_timer(
             std::chrono::milliseconds(10),
-            std::bind(&RobotControlNode::encoder_callback, this),
+            [this]() { Encoderma::callback();},
             encoder_group
         );
 
         drive_timer_ = this->create_wall_timer(
             std::chrono::milliseconds(20),
-            std::bind(&RobotControlNode::drive_callback, this),
+            [this]() { RobotDrive::callback(); },
             drive_group
         );
     }
 
 private:
-    void encoder_callback() {
-     Encoderma::callback(); 
-    }
-
-    void drive_callback() {
-        RobotDrive::callback();
-    }
-
+   
     rclcpp::TimerBase::SharedPtr encoder_timer_;
     rclcpp::TimerBase::SharedPtr drive_timer_;
 };
