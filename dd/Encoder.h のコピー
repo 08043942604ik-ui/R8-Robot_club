@@ -6,8 +6,8 @@
 
 #include <rclcpp/rclcpp.hpp>
 
-#include "titan.h"
-#include "VMXPi.h"
+#include <titan.h>
+#include <VMXPi.h>
 
 // 左右のタイヤエンコーダーを20msごとに読み取るROS2ノード
 class Encoderma : public rclcpp::Node {
