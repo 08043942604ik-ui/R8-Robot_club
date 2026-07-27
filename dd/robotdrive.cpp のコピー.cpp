@@ -32,7 +32,7 @@ RobotDrive::RobotDrive(Encoderma& encoder) : encoders_(encoder) {
 
   timer_ = create_wall_timer(std::chrono::milliseconds(20), [this]() { callback(); });
 
-encoders_.StopAll();
+encoders_.stopAll();
 }
 
 
