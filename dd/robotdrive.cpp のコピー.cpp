@@ -430,26 +430,25 @@ std::this_thread::sleep_for(std::chrono::milliseconds(40));
 return true;//murnに入れる
 }
 
-double RobotDrive::RobotTurn(int w) {
+double RobotDrive::RobotTurn(int o) {
   float d = 0;
   double result_dist = 0.0;
     
 //色によって変わるが例えば赤
-switch(w) {
+switch(o) {
 case 2:
 case 3:
 case 5:
 case 6:
 
-   turnrunning = true;
 float d = 0; //一回だけ
  
     while(true) {     
-    if(d != 0.5) {
+    if(d != 0.5f) {
    
     encoders_.setSpeed(3, -0.5);
     encoders_.setSpeed(2, 0.5);
-    d = 0.5;
+    d = 0.5f;
     
 }   
 
@@ -460,7 +459,6 @@ float d = 0; //一回だけ
 
 
     result_dist = 11.775;
-    turnrunning = false;
     
 }
 
@@ -473,15 +471,14 @@ case 1:
 case 4:
 case 7: 
  
-turnrunning = true;
 float d = 0;
 
     while(true) {     
-    if(d != 0.5) {
+    if(d != 0.5f) {
  
     encoders_.setSpeed(3, -0.5);
     encoders_.setSpeed(2, 0.5);
-    d = 0.5;
+    d = 0.5f;
    
 }
  
@@ -492,7 +489,6 @@ float d = 0;
 
 
     result_dist = 23.55;
-    turnrunning = false;
 }
 
 std::this_thread::sleep_for(std::chrono::milliseconds(1));
@@ -500,14 +496,13 @@ std::this_thread::sleep_for(std::chrono::milliseconds(1));
 break;
 
 case 0: 
-   turnrunning = true;
 float d = 0;
     while(true) {     
-    if(d != 0.5) {
+    if(d != 0.5f) {
 
     encoders_.setSpeed(3, -0.5);
     encoders_.setSpeed(2, 0.5);
-    d = 0.5;
+    d = 0.5f;
 }
 
         
@@ -515,7 +510,6 @@ float d = 0;
     encoders_.setSpeed(3, 0.0);
     encoders_.setSpeed(2, 0.0);
     result_dist = 35.325;  
-    turnrunning = false;
     
 }
 std::this_thread::sleep_for(std::chrono::milliseconds(1));
