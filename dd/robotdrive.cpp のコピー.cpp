@@ -1,5 +1,5 @@
 #include <cmath>
-
+#include "robotdrive.h"
 
 namespace
 {
@@ -13,12 +13,12 @@ int AbsDegree = 0;         // 四捨五入後の角度
 int turndeg = 0;          // 原点へ向くための回転角度
 int result = 0;           // 結果
 int add = 0;              // 90度を何回分回ったか
-int times = 0; //何回目か
 bool turnrunning = false; //機体が回転中か
 int times = 0;//何回機体が回転してるか
 bool timer = true; //タイマースタートを一回にするため
 bool end = false; //タイマーの秒数を取るのを一回だけにするため
 double line = 0.0;
+int w = 0;
 
 // 既存のcallback側などで更新されている前提
 extern bool Mrun;
@@ -202,9 +202,18 @@ encoders_.setSpeed(3, 0.0);
 encoders_.setSpeed(2, 0.0);
 line = TotalDistance + 35.325;
 
-std::thread([w = times]() {
+turnrunning = true;
+int current_w = times;
+times = -1;
+
+  
+if(turn_thread.joinable()) {
+        turn_thread.join(); 
+    }
+
+Turna_thread = std::thread([w = current_w]() {
 RobotTurn(w); 
-    }).detach();    
+    });   
 
     
 std::this_thread::sleep_for(std::chrono::milliseconds(40));
@@ -225,9 +234,18 @@ encoders_.setSpeed(3, 0.0);
 encoders_.setSpeed(2, 0.0);
 line = TotalDistance + 23.55;
 
-std::thread([w = times]() {
+turnrunning = true;
+int current_w = times;
+times = -1;
+
+  
+if(turn_thread.joinable()) {
+        turn_thread.join(); 
+    }
+
+Turna_thread = std::thread([w = 1]() {
 RobotTurn(w); 
-    }).detach();
+    });
 
 std::this_thread::sleep_for(std::chrono::milliseconds(40));
 
@@ -245,9 +263,18 @@ encoders_.setSpeed(3, 0.0);
 encoders_.setSpeed(2, 0.0);
 line = TotalDistance + 11.775;
 
-std::thread([w = times]() {
+turnrunning = true;
+int current_w = times;
+times = -1;
+
+  
+if(turn_thread.joinable()) {
+        turn_thread.join(); 
+    }
+
+Turna_thread = std::thread([w = current_w]() {
 RobotTurn(w); 
-    }).detach();
+    });
 
     
 std::this_thread::sleep_for(std::chrono::milliseconds(40));
@@ -273,9 +300,20 @@ encoders_.setSpeed(3, 0.0);
 encoders_.setSpeed(2, 0.0);
 line = TotalDistance + 11.775;
 
-std::thread([w = times]() {
-RobotTurn(w); 
-    }).detach();
+turnrunning = true;
+     int current_w = times; 
+      times = -1; 
+
+      if(turn_thread.joinable()) {
+          turn_thread.join();
+      }
+
+      turn_thread = std::thread([w = current_w]() { 
+          RobotTurn(w); 
+      });
+
+  
+
 
 std::this_thread::sleep_for(std::chrono::milliseconds(40));
     
@@ -295,9 +333,18 @@ encoders_.setSpeed(3, 0.0);
 encoders_.setSpeed(2, 0.0);
 line = TotalDistance + 23.55;
 
-std::thread([w = times]() {
+turnrunning = true;
+int current_w = times;
+times = -1;
+
+  
+if(turn_thread.joinable()) {
+        turn_thread.join(); 
+    }
+
+Turna_thread = std::thread([w = current_w]() {
 RobotTurn(w); 
-    }).detach();
+    });
 
 std::this_thread::sleep_for(std::chrono::milliseconds(40));
     
@@ -321,9 +368,18 @@ encoders_.setSpeed(3, 0.0);
 encoders_.setSpeed(2, 0.0);
 line = TotalDistance + 11.775;
 
-std::thread([w = times]() {
+turnrunning = true;
+int current_w = times;
+times = -6;
+
+  
+if(turn_thread.joinable()) {
+        turn_thread.join(); 
+    }
+
+Turna_thread = std::thread([w = current_w]() {
 RobotTurn(w); 
-    }).detach();
+    });
 
 std::this_thread::sleep_for(std::chrono::milliseconds(40));
 
@@ -342,9 +398,18 @@ encoders_.setSpeed(3, 0.0);
 encoders_.setSpeed(2, 0.0);
 line = TotalDistance + 23.55;
 
-std::thread([w = times]() {
+turnrunning = true;
+int current_w = times;
+times = -1;
+
+  
+if(turn_thread.joinable()) {
+        turn_thread.join(); 
+    }
+
+Turna_thread = std::thread([w = 7]() {
 RobotTurn(w); 
-    }).detach();//こいつはバックグラウンドで行う。そうするとコールバックはこいつの処理を待たなくていい
+    });
 
 std::this_thread::sleep_for(std::chrono::milliseconds(40));
 
@@ -457,11 +522,26 @@ std::this_thread::sleep_for(std::chrono::milliseconds(1));
 }//while,end
 
 break;
+
+default :
+  break;
+
 }//switch終わり
 
 set = 0;
 wastedist += result_dist; 
-++times; 
+
+if (w == 0)      { times = 1; }
+else if (w == 1) { times = 2; }
+else if (w == 2) { times = 3; }
+else if (w == 3) { times = 4; }
+else if (w == 4) { times = 5; }
+else if (w == 5) { times = 6; } 
+else if (w == 6) { times = 7; }
+else if (w == 7) { times = 8; } 
+
+  
+  
 turnrunning = false; 
 
 return result_dist;
