@@ -19,7 +19,7 @@ int returnToOrigin(double Xe, double Ye);
 int AverageChecker(double dd);
 int RobotMovement();
 double turnDistanceChecker();//totalの距離と引く数を取るため
-void callback();
+static void callback();
 
 private :
 Encoderma& encoders_;
