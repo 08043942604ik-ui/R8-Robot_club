@@ -1,3 +1,5 @@
+#program once
+
 #include <titan.h>
 #include <chrono>
 #include <thread>
