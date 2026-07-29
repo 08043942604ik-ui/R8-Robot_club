@@ -189,7 +189,7 @@ int RobotDrive::AverageChecker(double dd)
 bool RobotDrive::RobotMovement() {
     
  
-else if(x > -600 && x < -650) {
+else if(x > -650 && x < -600) {
 
 if(y > 0 && y < 50){
 
