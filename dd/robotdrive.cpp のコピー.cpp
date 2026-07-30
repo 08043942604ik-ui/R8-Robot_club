@@ -7,7 +7,7 @@ namespace
 constexpr double kPi = 3.14159265358979323846;
 int Kakudo = 90;
 double turn_count = 0.0;   // 回転したときの走行距離
-bool once = false;         // IncreaseAxis邵ｺ・ｮ隴崢陋ｻ譏ｴ笆｡邵ｺ鬘鯉ｽ｡蠕娯鴬陷・ｽｦ騾・・逡曾nint Kakudo = 0;            // 霑ｴ・ｾ陜ｨ・ｨ邵ｺ・ｮ髫苓ｲ橸ｽｺ・ｦ
+bool once = true;         // IncreaseAxis邵ｺ・ｮ隴崢陋ｻ譏ｴ笆｡邵ｺ鬘鯉ｽ｡蠕娯鴬陷・ｽｦ騾・・逡曾nint Kakudo = 0;            // 霑ｴ・ｾ陜ｨ・ｨ邵ｺ・ｮ髫苓ｲ橸ｽｺ・ｦ
 int deg = 0;               // IncreaseAxis邵ｺ・ｧ闖ｴ・ｿ邵ｺ繝ｻ・ｧ雋橸ｽｺ・ｦ
 double hypotenuse = 0.0;   // 陷ｴ貅ｽ縺帷ｸｺ・ｾ邵ｺ・ｧ邵ｺ・ｮ髴肴辨螻ｬ
 double DFH = 0.0;          // atan2邵ｺ・ｧ陷・ｽｺ邵ｺ蜉ｱ笳・囓雋橸ｽｺ・ｦ
