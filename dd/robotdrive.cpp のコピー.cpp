@@ -53,7 +53,7 @@ if(d != 0.5) {
     
 }   
 
-    if(encoders_.GetTotalDistance() >= 11.775) {
+    if(encoders_.GetTotalDistance() >= 117.7) {
 
     encoders_.setSpeed(3, 0.0);
     encoders_.setSpeed(2, 0.0);
@@ -100,7 +100,7 @@ std::array<double, 2> RobotDrive::IncreaseAxis(int degrees)
 {
   if (once) {
      
-// 隴悟唱螻馴ｶ・ｴ陟募ｾ個竏ｵ諤呵崕譏ｴ繝ｻ闕ｳﾂ陜玲ｧｭ笆｡邵ｺ螟ｧ貂戊ｲ・ｴ具ｽｽ蜥ｲ・ｽ・ｮ邵ｺ・ｨ陜難ｽｺ雋・・・ｷ譎槫ｱｬ郢ｧ蜑・ｽｿ譎擾ｽｭ繝ｻ  if (once) {
+// 隴悟唱螻馴ｶ・ｴ陟募ｾ個竏ｵ諤呵崕譏ｴ繝ｻ闕ｳﾂ陜玲ｧｭ笆｡邵ｺ螟ｧ貂戊ｲ・ｴ具ｽｽ蜥ｲ・ｽ・ｮ邵ｺ・ｨ陜難ｽｺ雋・・・ｷ譎槫ｱｬ郢ｧ蜑・ｽｿ譎擾ｽｭ繝ｻ  
     deg = degrees;
     xyPa = encoders_.GetTotalDistance() - wastedist.load();
 
@@ -175,7 +175,7 @@ int RobotDrive::AverageChecker(double dd)
     // int邵ｺ・ｧ邵ｺ・ｯ邵ｺ・ｪ邵ｺ驥腔uble邵ｲ繝ｻ1.5邵ｺ・ｪ邵ｺ・ｩ郢ｧ繧・・陞ｳ螢ｹ縲堤ｸｺ髦ｪ・狗ｹｧ蛹ｻ竕ｧ邵ｺ・ｫ邵ｺ蜷ｶ・狗ｸｲ繝ｻ    const double k = dd / static_cast<double>(g);
 
     // 1陜玲ｧｭ繝ｻ90陟趣ｽｦ隴悟唱螻鍋ｸｺ・ｫ陟｢繝ｻ・ｦ竏壺・髴肴辨螻ｬ邵ｺ繝ｻ1繝ｻ繝ｻ2邵ｺ・ｪ郢ｧ逕ｻ豐ｻ騾包ｽｨ
-    if (k >= 11.0 && k <= 12.0) {
+    if (k >= 110.0 && k <= 120.0) {
       return g;
     }
   }
@@ -197,7 +197,7 @@ if(times == 0) {
 if(turnrunning == false) {
 encoders_.setSpeed(3, 0.0);
 encoders_.setSpeed(2, 0.0);
-line = encoders_.GetTotalDistance() + 35.325;
+line = encoders_.GetTotalDistance() + 353.25;
 
 turnrunning = true;
 int current_w = times;
@@ -229,7 +229,7 @@ if(times == 1) {
 if(turnrunning == false) {
 encoders_.setSpeed(3, 0.0);
 encoders_.setSpeed(2, 0.0);
-line = encoders_.GetTotalDistance() + 23.55;
+line = encoders_.GetTotalDistance() + 235.5;
 
 turnrunning = true;
 int current_w = times;
@@ -258,7 +258,7 @@ if(times == 2) {
 if(turnrunning == false) {
 encoders_.setSpeed(3, 0.0);
 encoders_.setSpeed(2, 0.0);
-line = encoders_.GetTotalDistance() + 11.775;
+line = encoders_.GetTotalDistance() + 117.75;
 
 turnrunning = true;
 int current_w = times;
@@ -295,7 +295,7 @@ if(turnrunning == false) {
 
 encoders_.setSpeed(3, 0.0);
 encoders_.setSpeed(2, 0.0);
-line = encoders_.GetTotalDistance() + 11.775;
+line = encoders_.GetTotalDistance() + 117.75;
 
 turnrunning = true;
      int current_w = times; 
@@ -328,7 +328,7 @@ if(turnrunning == false) {
 
 encoders_.setSpeed(3, 0.0);
 encoders_.setSpeed(2, 0.0);
-line = encoders_.GetTotalDistance() + 23.55;
+line = encoders_.GetTotalDistance() + 235.5;
 
 turnrunning = true;
 int current_w = times;
@@ -363,7 +363,7 @@ if(turnrunning == false) {
 
 encoders_.setSpeed(3, 0.0);
 encoders_.setSpeed(2, 0.0);
-line = encoders_.GetTotalDistance() + 11.775;
+line = encoders_.GetTotalDistance() + 117.75;
 
 turnrunning = true;
 int current_w = times;
@@ -393,7 +393,7 @@ if(turnrunning == false) {
 
 encoders_.setSpeed(3, 0.0);
 encoders_.setSpeed(2, 0.0);
-line = encoders_.GetTotalDistance() + 23.55;
+line = encoders_.GetTotalDistance() + 235.5;
 
 turnrunning = true;
 int current_w = times;
@@ -456,7 +456,7 @@ float d = 0; //闕ｳﾂ陜玲ｧｭ笆｡邵ｺ繝ｻ
     encoders_.setSpeed(2, 0.0);
 
 
-    result_dist = 11.775;
+    result_dist = 117.75;
     break;
     
 }
@@ -489,7 +489,7 @@ float d = 0;
     encoders_.setSpeed(2, 0.0);
 
 
-    result_dist = 23.55;
+    result_dist = 235.5;
     break;
 }
 
@@ -513,7 +513,7 @@ float d = 0;
     if(encoders_.GetTotalDistance() >= line) {
     encoders_.setSpeed(3, 0.0);
     encoders_.setSpeed(2, 0.0);
-    result_dist = 35.325;  
+    result_dist = 353.25;  
     break;
     
 }
