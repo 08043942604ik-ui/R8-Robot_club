@@ -25,6 +25,9 @@ static void callback();
 
 private :
 Encoderma& encoders_;
+void TheBeginning();
+double RobotTun(int);
+void callback();
 
  rclcpp::TimerBase::SharedPtr timer_; //受け取る側を合わせるため
 
