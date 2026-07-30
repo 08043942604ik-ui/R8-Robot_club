@@ -1,47 +1,54 @@
 #pragma once
 
-#include <titan.h>
-#include <chrono>
-#include <thread>
-#include "Encoder.h"
 #include <array>
+#include <atomic>
+#include <chrono>
 #include <cmath>
-#include <atomic>　//分割されないように一塊にするため
+#include <thread>
+
+#include <titan.h>
+
+#include "Encoder.h"
 
 class RobotDrive : public rclcpp::Node {
-public :
+ public:
+  explicit RobotDrive(Encoderma& encoder);
+  ~RobotDrive() override;
 
-RobotDrive();
-~RobotDrive() override;
+  int GetDegree_man();
+  int GetDegree(double turnDistance);
+  std::array<double, 2> IncreaseAxis(int degrees);
+  int returnToOrigin(double Xe, double Ye);
+  int AverageChecker(double dd);
+  bool RobotMovement();
+  double turnDistanceChecker();
+  void callback();
 
-int GetDegree_man();
-int GetDegree(double turnDistance);
-std::array<double, 2> IncreaseAxis(int degrees);
-int returnToOrigin(double Xe, double Ye);
-int AverageChecker(double dd);
-int RobotMovement();
-double turnDistanceChecker();//totalの距離と引く数を取るため
-static void callback();
+ private:
+  void TheBeginning();
+  double RobotTurn(int o);
 
-private :
-Encoderma& encoders_;
-void TheBeginning();
-double RobotTun(int);
-void callback();
+  Encoderma& encoders_;
+  rclcpp::TimerBase::SharedPtr timer_;
+  std::array<double, 2> Xof{0.0, 0.0};
+  std::atomic<bool> turnrunning{false};
+  std::atomic<double> wastedist{11.775};
+  std::atomic<int> times{0};
+  std::thread Turna_thread;
 
- rclcpp::TimerBase::SharedPtr timer_; //受け取る側を合わせるため
-
-std::array<double, 2> Xof = 0; 
-std::atomic<bool> turnrunning{false}; 
-std::atomic<double> wastedist{11.775};
-double Cx = 0.0;          // 区間開始時のx座標
-double Cy = 0.0;          // 区間開始時のy座標
-std::atomic<int> times{0};
-std::thread Turna_thread;
-
-double x = 0.0;            // x座標
-double y = 0.0;            // y座標
-
-int delivery = 0;//運び屋
-int set = 1;//セットスピード,0にならないと動かない色読んで、左に90°回ってから0になる
+  double Cx = 0.0;
+  double Cy = 0.0;
+  double x = 0.0;
+  double y = 0.0;
+  double d = 0.0;
+  double hole = 0.0;
+  double xyPa = 0.0;
+  double line = 0.0;
+  int delivery = 0;
+  int set = 1;
+  bool begin = true;
+  bool xory = false;
+  bool Marn = false;
+  bool Mrun = false;
 };
+
