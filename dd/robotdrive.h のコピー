@@ -12,7 +12,7 @@
 
 class RobotDrive : public rclcpp::Node {
  public:
-  explicit RobotDrive(Encoderma& encoder);
+  explicit RobotDrive(Encoderma& encoder); //勝手に型変換しないようにするため
   ~RobotDrive() override;
 
   int GetDegree_man();
