@@ -148,14 +148,14 @@ int RobotDrive::returnToOrigin(double Xe, double Ye)
   // 邵ｺ阮呻ｼ・ｸｺ・ｯ陟募ｾ後定惷貅ｽ縺幄包ｽｩ陝ｶ・ｰ邵ｺ・ｮ陜玲ｫ・ｽｻ・｢郢晢ｽｫ郢晢ｽｼ郢晢ｽｫ郢ｧ螳夲ｽｩ・ｰ郢ｧ竏夲ｽ玖撻・ｴ隰・
   turndeg = 180 - (90 + AbsDegree);
 
-  if (Xe < 0) {
+  if (Xe > 0) {
     result = 360 - turndeg;
   }
   else {
     result = turndeg;
   }
 
-  // 0繝ｻ繝ｻ59陟趣ｽｦ邵ｺ・ｫ騾ｶ・ｴ邵ｺ繝ｻ  while (result < 0) {
+  // 0繝ｻ繝ｻ59陟趣ｽｦ邵ｺ・ｫ騾ｶ・ｴ邵ｺ繝ｻ  
   while (result < 0) {
     result += 360;
   }
@@ -579,12 +579,12 @@ delivery = GetDegree_man();
 Xof = IncreaseAxis(delivery);
 }
 }
-RCLCPP_INFO(get_logger(), "x陟趣ｽｧ隶薙・%.2f : y陟趣ｽｧ隶薙・%.2f", Xof[0], Xof[1]);
+RCLCPP_INFO(get_logger(), "x座標%.2f : y座標%.2f", Xof[0], Xof[1]);
 
 }
 catch(const std::exception& errorD) {
 
-RCLCPP_ERROR(this->get_logger(), "郢ｧ・ｨ郢晢ｽｩ郢晢ｽｼ邵ｺ讙主験騾墓ｺ假ｼ邵ｺ・ｾ邵ｺ蜉ｱ笳・%s", errorD.what());
+RCLCPP_ERROR(this->get_logger(), "エラーが起きました%s", errorD.what());
 }
 
 }
