@@ -563,3 +563,29 @@ RCLCPP_ERROR(this->get_logger(), "エラーが発生しました%s", errorD.what
 }
 }
 
+
+
+const auto distance = RLDistance();
+
+    if (first_callback_) {
+        previous_distance_ = distance;
+        first_callback_ = false;
+        return;
+    }
+
+    const double left_delta =
+        std::abs(distance[0] - previous_distance_[0]);
+
+    const double right_delta =
+        std::abs(distance[1] - previous_distance_[1]);
+
+    TotalDistance += (left_delta + right_delta) / 2.0;
+
+    previous_distance_ = distance;
+
+
+
+RCLCPP_INFO(this->get_logger(), "Left_dis%lf:Right%lf:totaldistance%lf", left_delta, right_delta, TotalDistance);
+
+ std::this_thread::sleep_for(std::chrono::milliseconds(100));
+}
