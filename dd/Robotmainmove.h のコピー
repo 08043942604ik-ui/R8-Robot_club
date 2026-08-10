@@ -3,6 +3,7 @@
 #include <rclcpp/rclcpp.hpp>
 #include "robotdrive.h"
 #include "Encoder.h"
+#include "Lidar.h"
 
 class Robotmain : public rclcpp::Node {
 public:
@@ -19,6 +20,12 @@ public:
             [this]() { Encoderma::callback();},
             encoder_group
         );
+    sensor_timer_ = this->create_wall_timer(
+    std::chrono::milliseconds(50),
+    [this]() { Lidarnode::timer_callback(); },
+    encoder_group);
+
+
 
         drive_timer_ = this->create_wall_timer(
             std::chrono::milliseconds(20),
@@ -30,5 +37,7 @@ public:
 private:
    
     rclcpp::TimerBase::SharedPtr encoder_timer_;
+    rclcpp::TimerBase::SharedPtr sensor_timer_;
+
     rclcpp::TimerBase::SharedPtr drive_timer_;
 };
