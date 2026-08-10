@@ -5,7 +5,7 @@
 class Lidarnode : public rclcpp::Node {
 
 Lidarnode();
-
+~Lidarnode();
 
 void timer_callback();
 double disGetter();
