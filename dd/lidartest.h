@@ -31,8 +31,8 @@ bool single_channel = false; //こちらから操作できるか
 bool intensity = false; //レーザーの色の強さをうけとるか
 float maxum = 180.0f; //何度から何度までの景色を切り取るかという設定
 float minum = -180.0f;
-scanrangemax = 16.f; //何メートルから何メートルまでの壁を検知対象にするかという設定で
-scanrangemin = 0.1f;
+float scanrangemax = 16.f; //何メートルから何メートルまでの壁を検知対象にするかという設定で
+float scanrangemin = 0.1f;
   
 
 
