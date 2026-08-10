@@ -18,10 +18,7 @@ Ldr.setlidaropt(LidarPropAutoReconnect, &auto_reconnect, sizeof(bool));
 Ldr.setlidaropt(LidarPropSingleChannel, &single_channel, sizeof(bool));
 Ldr.setlidaropt(LidarPropIntensities, &intensity, sizeof(bool));
 Ldr.setlidaropt(LidarPropReversion, &reversion, sizeof(bool));
+ 
 
-
-
-  
-
-  
+return Ldr.initialize();  
 }
