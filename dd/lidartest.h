@@ -14,7 +14,7 @@ void End();
 
 
 private :
-Lidar Ldr;
+CYdLidar Ldr;
 int baudrate = 230400;
 int lidar_type = TYPE_TOF;
 int sample_rate = 4;
