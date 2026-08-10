@@ -19,7 +19,7 @@ double SendDBW(double k);
 private :
 rclcpp::TimerBase::SharedPtr timer_;
 double distanceByWalls;
-
+Lidarinit lidars;
 
 
 }
