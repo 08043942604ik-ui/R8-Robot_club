@@ -1,6 +1,6 @@
 #include "lidartest.h"
 #include <rclcpp/rclcpp.hpp>
-#include <sensor_msgs/msg/laser_scan.hpp>
+#include <vector>
 
 class Lidarnode : public rclcpp::Node {
 
@@ -13,12 +13,9 @@ double SendDBW(double k);
 
 
 
-
-
-
 private :
 rclcpp::TimerBase::SharedPtr timer_;
-double distanceByWalls;
+std::vector<float> distanceByWalls;
 Lidarinit lidars;
 
 
