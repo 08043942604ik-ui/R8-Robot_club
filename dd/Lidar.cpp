@@ -2,12 +2,18 @@
 
 
 Lidarnode::Lidarnode() : Node("lidar") {
-Lidars::initi();
-Lidars::start();
+lidars::initi();
+lidars::start();
   
 timer_ = create_wall_timer(
   std::chrono::milliseconds(20),
       [this]() { timer_callback(); });
+lidars::End();
+  
+}
+
+~Lidarnode() {
+lidars.End();
   
 }
 
@@ -30,9 +36,13 @@ void timer_callback() {
     if (!laser_.isScanning()) return;
 
 if(dud) {
+lidars::initi();
+lidars::start 
 disGetter();
 
 SendDBW(distanceByWalls);
 
     }
+
+
 }
