@@ -6,6 +6,9 @@ class Lidarinit {
 private :
 CYdLidar Ldr;
 
+bool initialized_ = false;
+bool started_ = false;
+
 std::string port = "/dev/ttyAMA0"
 int baudrate = 230400; //一秒間にデータを送る速さ
 std::string Ignore_array = "46, 180, -46, -180";  
@@ -49,24 +52,42 @@ Ldr.setlidaropt(LidarPropMaxAngle, &maxum, sizeof(float));
 Ldr.setlidaropt(LidarPropMinAngle, &minum, sizeof(float));
 Ldr.setlidaropt(LidarPropMaxRange, &scanrangemax, sizeof(float)); 
 Ldr.setlidaropt(LidarPropMinRange, &scanrangemin, sizeof(float));
+
+
   
-return Ldr.initialize();  
+
+initialized_ = Ldr.initialize();
+return initialized_;  
 }
 
 bool start() {
-req = Ldr.inititalize(); 
+if (!initialized_) {
+        return false;
+    }
+
+    started_ = Ldr.turnOn();
+    return started_;
+
  
- if(req) {
-Ldr.turnOn();
 
-return true; 
- }
-
-else {
-
-return false;
 }
 
+bool isScanning()
+{
+    if (!initialized_ || !started_) {
+        return false;
+    }
+
+    return Ldr.isScanning();
+}
+
+bool getScan(LaserScan& scan)
+{
+    if (!initialized_ || !started_) {
+        return false;
+    }
+
+    return Ldr.doProcessSimple(scan);
 }
 
 void stop() {
@@ -79,13 +100,16 @@ Ldr.turnOff();
 }
 
 void End() {
-if(!isScanning) {
 
-return;
-}
+    if (started_) {
+        Ldr.turnOff();
+        started_ = false;
+    }
 
-Ldr.turnOff();
-Ldr.disconnecting;
+    if (initialized_) {
+        Ldr.disconnecting();
+        initialized_ = false;
+    }
 }
 
 
