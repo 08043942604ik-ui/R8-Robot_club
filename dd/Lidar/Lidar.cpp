@@ -2,14 +2,25 @@
 
 
 Lidarnode::Lidarnode() : Node("lidar") {
-lidars::initi();
-lidars::start();
-  
-timer_ = create_wall_timer(
-  std::chrono::milliseconds(20),
-      [this]() { timer_callback(); });
-lidars::End();
-  
+    RCLCPP_INFO(get_logger(), "Lidar constructor");
+
+    const bool init_ok = lidars.initi();
+
+    RCLCPP_INFO(
+        get_logger(),
+        "Lidar initialize = %s",
+        init_ok ? "OK" : "FAILED");
+
+    if (!init_ok) {
+        return;
+    }
+
+    const bool start_ok = lidars.start();
+
+    RCLCPP_INFO(
+        get_logger(),
+        "Lidar start = %s",
+        start_ok ? "OK" : "FAILED");
 }
 
 ~Lidarnode() {
