@@ -9,14 +9,14 @@ CYdLidar Ldr;
 bool initialized_ = false;
 bool started_ = false;
 
-std::string port = "/dev/ttyAMA0"
+std::string port = "/dev/ttyUSB0";
 int baudrate = 230400; //一秒間にデータを送る速さ
 std::string Ignore_array = "46, 180, -46, -180";  
 int lidar_type = TYPE_TOF; //形式T-mini plusはTof
 int sample_rate = 4;//kHz
 int device_type = YDLIDAR_TYPE_SERIAL; //接続方式シリアルかインターネット
 int abnormal_count = 4; //データが何回乱れたらエラーになるか
-bool fixed_resolution = true; //レーザーの点と点の間の角度を、常に固定にするかどうかの設定
+bool fixed_resolution = false; //レーザーの点と点の間の角度を、常に固定にするかどうかの設定
 bool dyreverse = false; //データの前後を180度ひっくり返すかどうか.
 float scan_frequency = 10.0; //モーターの回転スピード
 bool auto_reconnect = true; //接続切れても再接続を試みるか
@@ -37,7 +37,7 @@ Lidarinit() = default;
 bool initi() {
 Ldr.setlidaropt(LidarPropSerialPort, port.c_str(), port.size());
 Ldr.setlidaropt(LidarPropIgnoreArray, Ignore_array.c_str(), Ignore_array.size());
-Ldr.setlidaropt(LidarPropBaudrate, &baudrate, sizeof(int));
+Ldr.setlidaropt(LidarPropSerialBaudrate, &baudrate, sizeof(int));
 Ldr.setlidaropt(LidarPropLidarType, &lidar_type, sizeof(int));
 Ldr.setlidaropt(LidarPropSampleRate, &sample_rate, sizeof(int));
 Ldr.setlidaropt(LidarPropDeviceType, &device_type, sizeof(int));
@@ -46,7 +46,7 @@ Ldr.setlidaropt(LidarPropFixedResolution, &fixed_resolution, sizeof(bool));
 Ldr.setlidaropt(LidarPropScanFrequency, &scan_frequency, sizeof(float));
 Ldr.setlidaropt(LidarPropAutoReconnect, &auto_reconnect, sizeof(bool));
 Ldr.setlidaropt(LidarPropSingleChannel, &single_channel, sizeof(bool));
-Ldr.setlidaropt(LidarPropIntensities, &intensity, sizeof(bool));
+Ldr.setlidaropt(LidarPropIntenstiy, &intensity, sizeof(bool));
 Ldr.setlidaropt(LidarPropReversion, &dyreverse, sizeof(bool));
 Ldr.setlidaropt(LidarPropMaxAngle, &maxum, sizeof(float));
 Ldr.setlidaropt(LidarPropMinAngle, &minum, sizeof(float));
@@ -91,7 +91,7 @@ bool getScan(LaserScan& scan)
 }
 
 void stop() {
-if(!isScanning) {
+if(!isScanning()) {
 
 return;
 }
@@ -100,8 +100,7 @@ Ldr.turnOff();
 }
 
 void End() {
-
-    if (started_) {
+          if (started_) {
         Ldr.turnOff();
         started_ = false;
     }
@@ -110,6 +109,8 @@ void End() {
         Ldr.disconnecting();
         initialized_ = false;
     }
+        
+    
 }
 
 
@@ -119,4 +120,4 @@ void End() {
   
 
 
-};
+};  
