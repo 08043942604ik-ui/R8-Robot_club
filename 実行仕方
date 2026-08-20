@@ -13,13 +13,13 @@ colcon build \
 Finished ～～
 
 Summary ～～
-と出たら大体は成功。
+と出たら基本的には成功。
 
-もしファイルを追加したのならCMakeList.txtにpathなどを追加するのを忘れずに。
+新しいファイルを追加した場合は、必要に応じて CMakeLists.txt にファイルや依存関係を追加
 この場合も変更後buildしてください。
 
 2:次に
-別ターミナル(ここではターミナル2と呼ぶ)でRealptsenseノードを起動(realsense depth cameraを使わないのなら飛ばして3:に進む)
+別ターミナル(ここではターミナル2と呼ぶ)でRealtsenseノードを起動(realsense depth cameraを使わないのなら飛ばして3:に進む)
 source /opt/ros/humble/setup.bash
 source /home/vmx/realsense_ws/install/setup.bash
 
@@ -31,7 +31,8 @@ ros2 launch realsense2_camera rs_launch.py \
   enable_infra2:=false \
   enable_gyro:=false \
   enable_accel:=false
-これでerrorが出なくて、Realsense Node Is Up!と出ていたら大体は成功している。
+これでerrorが出なくて、Realsense Node Is Up!と出ていたら基本的には成功している。
+停止する場合はRealsense Node Is Up!を確認してからCtrl + C。
 
 3:そして本ターミナル(ここではターミナル1と呼ぶ)でrobot_main_nodeを起動
 cd /home/vmx/ROS2
@@ -47,18 +48,18 @@ ros2 run studica_control robot_main_node
 を実行。
 Ctrl + Cで終了。
 
-もしrealsense depth cameraを起動しているのなら起動から3秒待ってからCtrl + Cをする(線が絡まってやばい状況や、めっちゃerror出たときを除いて、その場合はすぐCtrl + C)
+もしrealsense depth cameraを起動しているのなら起動から3秒待ってからCtrl + Cをする(配線が危険な状況や、めっちゃerror出たときを除いて、その場合はすぐCtrl + C)
 
 4:
 終了したい場合はまずrobot_main_nodeを停止。
 方法はターミナル1でCtrl + Cで停止。
 
 つぎにrealsenseノードを停止。
-方法としてはターミナル2でCtrl + Cで停止。
+方法としてはターミナル2でCtrl + Cで停止(停止する場合はRealsense Node Is Up!を確認してからCtrl + C)。
 
-その次に念のためcameraのUSBを抜く。 注意:必ず上記のことを行ってからすること
-そしてros2 node listで何も出ないか確認
-/camera/cameraがでたらrealsenseノードが残っているもう一度ターミナル2でctrl + Cをするそれでも残っている場合はAIに聞いてください(俺にはわからない)
+その次に念のためcameraのUSBを抜く。 注意:できるだけ上記のことを行ってからすること
+LOGが出なくなったのを確認後に数秒待ってから(すぐやると残ってる場合がある)ros2 node listで何も出ないか確認
+/camera/cameraがでたらrealsenseノードが残っているもう一度ターミナル2でctrl + Cを実行する、それでも残っている場合はAIに聞いてください(俺にはわからない)
 
 /robotmainがでたらrobot_main_nodeが残っているのでもう一度ターミナル１でCtrl + Cをするそれでも無理な場合AIに相談してください。
 
