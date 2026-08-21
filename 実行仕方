@@ -1,5 +1,5 @@
-まずファイルを変更したのなら
-1:cd /home/vmx/ROS2
+1:まずファイルを変更したのなら
+cd /home/vmx/ROS2
 
 source /opt/ros/humble/setup.bash
 
