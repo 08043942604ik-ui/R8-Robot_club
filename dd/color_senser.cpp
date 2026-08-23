@@ -80,8 +80,8 @@ int getcolor(const sensor_msgs::msg::Image::ConstSharedPtr msginF)   {
                     ->image;
 
             // 画像中央
-            int x = image.cols / 2;
-            int y = image.rows / 2;
+            int center_x = image.cols / 2;
+            int center_y = image.rows / 2;
 
 int sum_r = 0;
 int sum_g = 0;
