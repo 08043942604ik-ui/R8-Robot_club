@@ -1,0 +1,28 @@
+
+startは起動
+stopは停止
+restartは再起動
+statusは状態
+enableは自動起動on
+disableはoff
+
+switch_monitor.service：
+
+sudo systemctl start switch_monitor.service
+sudo systemctl stop switch_monitor.service
+sudo systemctl restart switch_monitor.service
+sudo systemctl status switch_monitor.service
+
+robot_run.service：
+
+sudo systemctl start robot_run.service
+sudo systemctl stop robot_run.service
+sudo systemctl restart robot_run.service
+sudo systemctl status robot_run.service
+
+自動起動のON/OFFはこれです。
+
+sudo systemctl enable switch_monitor.service
+sudo systemctl disable switch_monitor.service
+sudo systemctl enable robot_run.service
+sudo systemctl disable robot_run.service
