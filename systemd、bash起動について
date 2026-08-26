@@ -290,3 +290,7 @@ sudo nano "ファイル名"
 そして編集
 
 2:sudo systemctl daemon-reload で設定を読み込ませる
+
+sudo nano /etc/systemd/system/switch_monitor.serviceこれがswitchを見張るserviceファイル
+
+sudo nano /etc/systemd/system/robot_run.service こっちがrobot_main_nodeのほう
