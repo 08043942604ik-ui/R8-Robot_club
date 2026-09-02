@@ -125,7 +125,13 @@ int RobotDrive::GetDegree(double turnDistance)
 
  
 po = add * 90;
-
+    
+if(encoders_->left) {
+po = po * -1;
+}
+    
+encoders_->right = false;
+encoders_->left = false;
   return po;
 }//GetDegree,END
 
