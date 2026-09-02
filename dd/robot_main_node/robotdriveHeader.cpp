@@ -23,9 +23,7 @@ class RobotDrive : public rclcpp::Node {
   bool RobotMovement(double xe, double ye);
   double turnDistanceChecker();
   void callback();
-  void RightTurn();
-  void LeftTurn();
-   bool mos = false; //lidar起動フラグ
+    bool mos = false; //lidar起動フラグ
  
   private:
   void TheBeginning();
@@ -55,7 +53,5 @@ class RobotDrive : public rclcpp::Node {
   bool xory = false;
   bool Marn = false;
   bool Mrun = false;
-　bool right = false;
-  bool left = false;
 
 };
