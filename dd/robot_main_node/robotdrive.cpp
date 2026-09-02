@@ -91,8 +91,23 @@ int RobotDrive::GetDegree_man()
     while (Kakudo1 >= 360) {
       Kakudo1 -= 360;
     }
-  
-  Mrun = false;
+    while (Kakudo1 <= -360) {
+      Kakudo1 += 360;
+    }
+
+if(Kakudo1 = -90) {
+Kakudo1 = 270;
+}
+
+if(Kakudo1 = -180) {
+Kakudo1 = 180;
+}      
+
+if(Kakudo1 = -270) {
+Kakudo1 = 90;
+}
+      
+Mrun = false;
 }
 
 
