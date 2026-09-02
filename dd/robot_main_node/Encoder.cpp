@@ -19,8 +19,8 @@ constexpr int kMotorFrequency = 15600;
 constexpr double kDriveSpeed = 0.05;
 constexpr int kTicksPerRotation = 1470;
 
-constexpr int kRightMotor = 0;  // 陷ｿ・ｳ郢ｧ・ｿ郢ｧ・､郢晢ｽ､邵ｺ・ｯM2
-constexpr int kLeftMotor = 1;   // 陝ｾ・ｦ郢ｧ・ｿ郢ｧ・､郢晢ｽ､邵ｺ・ｯM3
+constexpr int kRightMotor = 2;  // 陷ｿ・ｳ郢ｧ・ｿ郢ｧ・､郢晢ｽ､邵ｺ・ｯM2
+constexpr int kLeftMotor = 3;   // 陝ｾ・ｦ郢ｧ・ｿ郢ｧ・､郢晢ｽ､邵ｺ・ｯM3
 
 // 5%邵ｺ・ｮ闖ｴ譛ｱﾂ貅倥・0驕伜ｸ昜ｿ｣陜玲ｧｭ笘・nconstexpr double kDriveSpeed = 0.05;
 constexpr double kDriveSeconds = 60.0;
@@ -80,12 +80,20 @@ Encoderma::~Encoderma() {
 
   StopAll();
 }
-void Encoderma::stopAll() {
-  for (int motor = 0; motor < 4; ++motor) {
-    titan_->SetSpeed(static_cast<uint8_t>(motor), 0.0);
-  }
+
+void Encoderma::RightTurn() {
+titan_->SetSpeed(static_cast<uint8_t>(kRightMotor), 0.15);
+
+titan_->SetSpeed(static_cast<uint8_t>(kLeftMotor), 0.15);
+
+    
 }
 
+void Encoderma::LeftTurn() {
+titan_->SetSpeed(static_cast<uint8_t>(kLeftMotor), LTspeed);
+       RCLCPP_INFO(this->get_logger(), "モーターに指示が送られた");
+titan_->SetSpeed(static_cast<uint8_t>(kRightMotor), RTspeed);
+}
 
 void Encoderma::setSpeed() {
 
@@ -95,11 +103,6 @@ void Encoderma::setSpeed() {
     titan_->SetSpeed(static_cast<uint8_t>(kRightMotor), Rspeed);  
 }
 
-void Encoderma::setspeedturn() {
-    titan_->SetSpeed(static_cast<uint8_t>(kLeftMotor), LTspeed);
-       RCLCPP_INFO(this->get_logger(), "モーターに指示が送られた");
-    titan_->SetSpeed(static_cast<uint8_t>(kRightMotor), RTspeed);
- }
 
 void Encoderma::setspeedstop() {
     titan_->SetSpeed(static_cast<uint8_t>(kLeftMotor), 0.0);
