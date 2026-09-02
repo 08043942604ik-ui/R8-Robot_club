@@ -53,6 +53,4 @@ class RobotDrive : public rclcpp::Node {
   bool xory = false;
   bool Marn = false;
   bool Mrun = false;
-  bool right = false;
-  bool left = false;
-};
+ };
