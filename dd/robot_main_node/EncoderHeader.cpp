@@ -30,6 +30,8 @@ void LeftTurn();
 
   // 20ms邵ｺ譁絶・邵ｺ・ｫ陷ｻ・ｼ邵ｺ・ｰ郢ｧ蠕個繝ｻ0驕倩ｲ橸ｽｾ蠕後・陋帶㊧・ｭ・｢邵ｺ・ｨ陋滂ｽ､邵ｺ・ｮ髯ｦ・ｨ驕会ｽｺ郢ｧ螳夲ｽ｡蠕娯鴬
   void callback();
+bool right = false;
+bool left = false;
 
  private:
   std::shared_ptr<VMXPi> vmx_;
