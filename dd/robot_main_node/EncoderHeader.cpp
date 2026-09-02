@@ -23,7 +23,8 @@ class Encoderma : public rclcpp::Node {
   void setSpeed();
 void setspeedturn();
 void setspeedstop();  
-
+void RightTurn();
+void LeftTurn();
   void StopAll();
   void stopAll();
 
