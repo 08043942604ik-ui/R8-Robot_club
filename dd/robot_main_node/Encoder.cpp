@@ -81,6 +81,21 @@ Encoderma::~Encoderma() {
   StopAll();
 }
 
+void Encoderma::RightTurn() {
+titan_->SetSpeed(static_cast<uint8_t>(kRightMotor), 0.15);
+
+titan_->SetSpeed(static_cast<uint8_t>(kLeftMotor), 0.15);
+
+right = true;
+}
+
+void Encoderma::LeftTurn() {
+titan_->SetSpeed(static_cast<uint8_t>(kLeftMotor), LTspeed);
+       RCLCPP_INFO(this->get_logger(), "モーターに指示が送られた");
+titan_->SetSpeed(static_cast<uint8_t>(kRightMotor), RTspeed);
+
+left = true;
+}
 
 
 void Encoderma::setSpeed() {
