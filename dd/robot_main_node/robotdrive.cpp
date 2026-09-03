@@ -95,15 +95,15 @@ int RobotDrive::GetDegree_man()
       Kakudo1 += 360;
     }
 
-if(Kakudo1 = -90) {
+if(Kakudo1 == -90) {
 Kakudo1 = 270;
 }
 
-if(Kakudo1 = -180) {
+if(Kakudo1 == -180) {
 Kakudo1 = 180;
 }      
 
-if(Kakudo1 = -270) {
+if(Kakudo1 == -270) {
 Kakudo1 = 90;
 }
       
