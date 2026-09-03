@@ -26,7 +26,6 @@ class RobotDrive : public rclcpp::Node {
     bool mos = false; //lidar起動フラグ
  
   private:
-  void TheBeginning();
   double RobotTurn(int o);
   
   Encoderma& encoders_;
