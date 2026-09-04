@@ -505,30 +505,7 @@ std::this_thread::sleep_for(std::chrono::milliseconds(1));
 }
 break;
 
-case 0: 
-{
-float d = 0;
-    while(true) {     
-    if(!rclcpp::ok()) return 0.0;
 
-      if(d != 0.5f) {
-   std::this_thread::sleep_for(std::chrono::milliseconds(1));
-    encoders_.setspeedturn();
-    d = 0.5f;
-}
-
-        
-    if(encoders_.GetTotalDistance() >= line) {
-    encoders_.setspeedstop();
-    result_dist = 543.0;  
-    break;
-    
-}
-std::this_thread::sleep_for(std::chrono::milliseconds(1));
-}//while,end
-
-}
-break;
 
 
 default :
