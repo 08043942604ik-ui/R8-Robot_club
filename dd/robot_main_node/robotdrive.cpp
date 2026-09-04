@@ -219,20 +219,37 @@ bool RobotDrive::RobotMovement(double xe, double ye) {
  
 if(!rclcpp::ok()) return false;
  
-if(xe > 600 && xe < 650) {
+if(xe > 0 && xe < 50) {
 
 
 
 if(ye >= 0.0 && ye < 50.0) {
-RCLCPP_INFO(get_logger(), "moving");
+if(times == 10) {
+if(turnning == false) {
+encoder_.setspeedstop();
 
+line = encoders_.GetTotalDistance() + 362.0;
 
+turnning = true;
+int current_w = times;
+times = -1;
+
+if(genel->Turna_thread.joinable()) {
+genel->Turna_thread.join();
 }
 
-}//0 < y < 50
+gennel->Turna_thread = std::thread([this,current_w]() { RobotTurn(current_w); });
+
+std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    
+}   
+}
+}
+
+
 else if(ye > 600.0 && ye < 650.0) {
 
-if(times == 0) {
+if(times == 0 && times == 9) {
 if(turnrunning == false) {
 
  encoders_.setspeedstop();
@@ -254,13 +271,13 @@ RobotTurn(current_w);
 
 std::this_thread::sleep_for(std::chrono::milliseconds(40));
 
-}//陜玲ｧｭ笆ｲ邵ｺ・ｦ郢ｧ遏ｩﾂ豈費ｽｸ・ｭ邵ｺ・ｫ郢晢ｽ｢郢晢ｽｼ郢ｧ・ｿ郢晢ｽｼ雎・ｽ｢郢ｧ竏壺ｻ邵ｺ・ｻ邵ｺ蜉ｱ・･邵ｺ・ｪ邵ｺ繝ｻ}//times邵ｺ・ｧ闖ｴ蜍溷ｱ馴ｶ・ｮ邵ｺ荵晢ｽ定ｬｨ・ｰ邵ｺ蛹ｻ・矩・・鄂ｰ邵ｺ・ｯ隴厄ｽｲ邵ｺ蠕鯉ｽ狗ｹ晄亢縺・ｹ晢ｽｳ郢晏現窶ｲx900邵ｺ・ｨx1500邵ｺ繧・ｽ狗ｸｺ・ｨ邵ｺ讎翫・邵ｺ・ｫ900邵ｺ・ｮ邵ｺ・ｻ邵ｺ繝ｻ窶ｲ隘搾ｽｷ陷崎ｼ費ｼ邵ｺ・ｦ邵ｺ蜉ｱ竏ｪ邵ｺ繝ｻﾂｰ郢ｧ繝ｻ    }// 1500 < y < 1550
 }
 }
+}
+
+}//x>0
 
 
-
-}//0 < x < 50
 
 else if(xe > 600.0 && xe < 650.0) {
 
@@ -295,10 +312,10 @@ std::this_thread::sleep_for(std::chrono::milliseconds(40));
 }
 
 } //600 < y < 650
-else if(ye > 1500.0 && ye < 1550.0){
+else if(ye > 1500.0 && ye < 1550.0) {
 
 
-if(times == 2) {
+if(times == 2 && times == 7) {
 if(turnrunning == false) {
 
  encoders_.setspeedstop();
@@ -333,7 +350,7 @@ std::this_thread::sleep_for(std::chrono::milliseconds(40));
 else if(xe > 900.0 && xe < 950.0) {
 
 if(ye > 1500.0 && ye < 1550.0) {
-if(times == 3) {
+if(times == 3 && times == 6) {
 if(turnrunning == false) {
 
  encoders_.setspeedstop();
@@ -363,7 +380,7 @@ std::this_thread::sleep_for(std::chrono::milliseconds(40));
 else if(ye > 2100.0 && ye < 2150.0){
 
 
-if(times == 4) {
+if(times == 4 && times == 5) {
 if(turnrunning == false) {
 
  encoders_.setspeedstop();
@@ -416,6 +433,8 @@ case 0:
 case 1:
 case 2:
 case 3:
+case 5:
+case 7:
 {
 
 float d = 0; //闕ｳﾂ陜玲ｧｭ笆｡邵ｺ繝ｻ 
@@ -447,6 +466,8 @@ break;
     
 case 1:
 case 3:
+case 6:
+case 8:
 {
 
 float d = 0; //闕ｳﾂ陜玲ｧｭ笆｡邵ｺ繝ｻ 
@@ -476,7 +497,8 @@ std::this_thread::sleep_for(std::chrono::milliseconds(1));
 }
 break;    
     
-case 4: 
+case 4:
+case 10:
 {
  
 float d = 0;
@@ -524,7 +546,7 @@ else if (o == 5) { times = 6; }
 else if (o == 6) { times = 7; }
 else if (o == 7) { times = 8; } 
 else if (o == 8) { times = 9; }
-  
+else if (o == 9) { times = 10; }
   
 Mrun = true;
 turnrunning = false; 
