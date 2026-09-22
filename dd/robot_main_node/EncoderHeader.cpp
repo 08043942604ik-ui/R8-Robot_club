@@ -31,6 +31,7 @@ void LeftTurn();
   void callback();
 bool right = false;
 bool left = false;
+bool LimSwitchChecker();
 
  private:
   std::unique_ptr<studica_driver::Titan> titan_;
@@ -42,4 +43,5 @@ std::array<double, 2> previous_distance_{0.0, 0.0};
   double TotalDistance = 0.0;
   double left_delta = 0.0;
   std::shared_ptr<VMXPi> vmx_;
+bool AYok;
 };
