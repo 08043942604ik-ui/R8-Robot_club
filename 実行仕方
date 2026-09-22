@@ -1,51 +1,107 @@
-(前回自動起動をonにしてる場合)
-sudo systemctl is-active robot-main.service
-でactiveか確認
+＜前回、自動起動をONにしている場合＞
 
-<停止方法>
-3:もしスイッチがあるなら先にmotorを停止するそして
+最初に、次のコマンドでサービスが動作しているか確認する。
+
+systemctl is-active robot-main.service
+
+「active」と表示されたら、サービスは動作している。
+
+「inactive」と表示された場合は、次のコマンドで開始する。
+
+sudo systemctl start robot-main.service
+
+
+＜停止方法＞
+
+3：停止スイッチがある場合は、先にSTOPスイッチを押してモーターを停止する。
+
+モーターが停止したことを確認してから、次のコマンドでサービスを停止する。
+
 sudo systemctl stop robot-main.service
-で停止。
 
-ないならもう
+停止スイッチがなく、モーターが既に停止している場合は、そのまま次のコマンドでサービスを停止してよい。
+
 sudo systemctl stop robot-main.service
-で停止してよい。
 
-4: sudo systemctl is-active robot-main.service
-でinactiveとでたら、次に
+※モーター動作中に「systemctl stop」だけを非常停止の代わりに使用しないこと。
+
+
+4：次のコマンドでサービスの状態を確認する。
+
+systemctl is-active robot-main.service
+
+「inactive」と表示されたら、次のコマンドでRaspberry Piを停止する。
+
 sudo poweroff
-でraspberry Piを停止する。
-この時raspberry Piの緑のランプ(ACTランプ)が消えたのを確認し、sshの接続が切れたのを確認、かつstatusが青で点滅していることを確認。
-確認出来たら電源をoffあるいは抜いてよい。
+
+SSHの接続が切れたことを確認し、その後20～30秒待つ。
+
+Raspberry Piの緑色のACTランプが見える場合は、点滅が止まったことも確認する。ただし、Studica VMX-PiではACTランプがVMX基板の下に隠れているため、確認できなくてもよい。
+
+VMXの青色STATUSランプは、物理電源が供給されている間は点滅し続ける場合がある。そのため、青色STATUSランプが消えるまで待つ必要はない。また、青色点滅をRaspberry Piの停止完了確認には使用しない。
+
+SSHの接続が切れてから20～30秒経過し、モーターも停止していることを確認できたら、物理電源をOFFにする、または電源を抜いてよい。
 
 
-(前回自動起動をonにしてない場合)
-<開始方法>
-1: sudo systemctl enable robot-main.service
-sudo systemctl is-enable robot-main.serviceで確認
-enableとでたら次回から自動起動。
+＜前回、自動起動をONにしていない場合＞
 
-2:今は自動起動されないので
-sudo systemctl start robot-main..service
-で開始。
+＜開始方法＞
 
-<停止方法>
-3:もしスイッチがあるなら先にmotorを停止するそして
-sudo systemctl is-active robot-main.service
-でactiveなのを確認。
+1：次のコマンドで自動起動をONにする。
+
+sudo systemctl enable robot-main.service
+
+次のコマンドで設定を確認する。
+
+systemctl is-enabled robot-main.service
+
+「enabled」と表示されたら、次回のRaspberry Pi起動時からサービスが自動起動する。
+
+
+2：自動起動をONにしても、現在の起動中にサービスが自動で開始されるわけではない。そのため、今回は次のコマンドで開始する。
+
+sudo systemctl start robot-main.service
+
+次のコマンドで状態を確認する。
+
+systemctl is-active robot-main.service
+
+「active」と表示されたら、サービスは動作している。
+
+
+＜停止方法＞
+
+3：停止スイッチがある場合は、先にSTOPスイッチを押してモーターを停止する。
+
+次のコマンドでサービスが動作していることを確認する。
+
+systemctl is-active robot-main.service
+
+「active」と表示されたら、次のコマンドでサービスを停止する。
 
 sudo systemctl stop robot-main.service
-で停止。
 
-ないならもう
+停止スイッチがなく、モーターが既に停止している場合は、そのまま次のコマンドでサービスを停止してよい。
+
 sudo systemctl stop robot-main.service
-で停止してよい。
 
-4: sudo systemctl is-active robot-main.service
-でinactiveとでたら、次に
+※モーター動作中に「systemctl stop」だけを非常停止の代わりに使用しないこと。
+
+
+4：次のコマンドでサービスの状態を確認する。
+
+systemctl is-active robot-main.service
+
+「inactive」と表示されたら、次のコマンドでRaspberry Piを停止する。
+
 sudo poweroff
-でraspberry Piを停止する。
-この時raspberry Piの緑のランプ(ACTランプ)が消えたのを確認し、sshの接続が切れたのを確認、かつstatusが青で点滅していることを確認。
-確認出来たら電源をoffあるいは抜いてよい。
+
+SSHの接続が切れたことを確認し、その後20～30秒待つ。
+
+Raspberry Piの緑色のACTランプが見える場合は、点滅が止まったことも確認する。ただし、Studica VMX-PiではACTランプがVMX基板の下に隠れているため、確認できなくてもよい。
+
+VMXの青色STATUSランプは、物理電源が供給されている間は点滅し続ける場合がある。そのため、青色STATUSランプが消えるまで待つ必要はない。また、青色点滅をRaspberry Piの停止完了確認には使用しない。
+
+SSHの接続が切れてから20～30秒経過し、モーターも停止していることを確認できたら、物理電源をOFFにする、または電源を抜いてよい。
 
 
