@@ -14,7 +14,7 @@ SVE::SVE(std::shared_ptr<Encoderma> encoder, std::shared_ptr<BFE> buttons) : Nod
             std::chrono::milliseconds(100),
             [this]() {
                
-                if(buttons_->get_stop_button_state() && robot_run) {
+if(buttons_->get_stop_button_state() && robot_run) {
             status = true;
             
                robot_run->request_stop();
@@ -41,7 +41,7 @@ SVE::SVE(std::shared_ptr<Encoderma> encoder, std::shared_ptr<BFE> buttons) : Nod
 
                
                
-                if(buttons_->get_start_button_state() && !robot_run) {
+if(buttons_->get_start_button_state() && !robot_run) {
                status = true;
                 robot_run = std::make_shared<Robotmain>(encoder_1);
                 executor.add_node(robot_run);
@@ -64,7 +64,31 @@ SVE::SVE(std::shared_ptr<Encoderma> encoder, std::shared_ptr<BFE> buttons) : Nod
                 bo = false;
                status = false;
             }
+else if(encoder_1->AYok) {
+                status = true;
+                robot_run = std::make_shared<Robotmain>(encoder_1);
+                executor.add_node(robot_run);
+                bo = buttons_->reset_button_states();
+                
+                if(!bo) {
+                encoder_1->StopAll();    
+                general_values_->LWaitingThread();
 
+                executor.remove_node(robot_run);
+                 
+                 robot_run.reset();
+                
+                rclcpp::shutdown();
+                
+                return;
+                }
+ 
+
+                bo = false;
+               status = false;
+            
+}
+                        
 
 
 
