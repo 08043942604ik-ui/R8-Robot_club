@@ -8,11 +8,11 @@
 
 namespace {
 
-constexpr double Rspeed = -0.155;
-constexpr double Lspeed = 0.15;
+constexpr double Rspeed = -0.205;
+constexpr double Lspeed = 0.23;
 
-constexpr double RTspeed = -0.15;
-constexpr double LTspeed = -0.15;
+constexpr double RTspeed = -0.2;
+constexpr double LTspeed = -0.2;
 
 constexpr int kCanId = 42;
 constexpr int kMotorFrequency = 15600;
@@ -34,12 +34,12 @@ constexpr double kDistancePerTickM =
 
 }  // namespace
 
-Encoderma::Encoderma() : Node("studicaTiEC") {
+Encoderma::Encoderma(std::shared_ptr<VMXPi> vmx1) : Node("studicaTiEC"), vmx_(vmx1) {
   TotalDistance = 0.0;
   left_delta = 0.0;
   right_delta = 0.0;
 
-  vmx_ = std::make_shared<VMXPi>(true, 50);
+ 
   // VMX郢ｧ繝ｻ0Hz邵ｺ・ｧ陋ｻ譎・ｄ陋ｹ繝ｻ  vmx_ = std::make_shared<VMXPi>(true, 50);
   if (!vmx_->IsOpen()) {
     throw std::runtime_error(
@@ -50,7 +50,8 @@ Encoderma::Encoderma() : Node("studicaTiEC") {
         "VMXを開けません。sudoで実行し、他のVMXプログラムを停止してください。");
         */
         "VMX open failed. Run as root and stop other VMX programs.");
-  }
+  
+      }
 
   
 
@@ -60,15 +61,27 @@ Encoderma::Encoderma() : Node("studicaTiEC") {
       static_cast<uint16_t>(kMotorFrequency),
       static_cast<float>(kTicksPerRotation),
       vmx_);
+
+
   titan_->Enable(true);
 
   // 鬩溷調・ｷ螢ｹ・・ｹｧ蠕娯ｻ邵ｺ繝ｻ・畿NC驕ｶ・ｯ陝・・・帝￡・ｺ髫ｱ髦ｪ笘・ｹｧ荵昶螺郢ｧ竏堋・0繝ｻ譛・郢ｧ蜻域剰怏・ｹ陋ｹ繝ｻ  for (int motor = 0; motor < 4; ++motor) {
   for (int motor = 0; motor < 4; ++motor) {
     titan_->SetupEncoder(static_cast<uint8_t>(motor));
     titan_->ConfigureEncoder(static_cast<uint8_t>(motor), kDistancePerTickM);
-    titan_->ResetEncoder(static_cast<uint8_t>(motor));
-  }
+   
 
+  
+      
+  titan_->ResetEncoder(static_cast<uint8_t>(motor));
+
+    RCLCPP_INFO(
+        this->get_logger(),
+        "RESET後 M%d = %d",
+        motor,
+        titan_->GetEncoderCount(static_cast<uint8_t>(motor))
+    );
+  }
   StopAll();
 
 
@@ -82,14 +95,16 @@ Encoderma::~Encoderma() {
 }
 
 void Encoderma::RightTurn() {
-titan_->SetSpeed(static_cast<uint8_t>(kRightMotor), 0.15);
+std::this_thread::sleep_for(std::chrono::milliseconds(100));
+titan_->SetSpeed(static_cast<uint8_t>(kRightMotor), 0.2);
 
-titan_->SetSpeed(static_cast<uint8_t>(kLeftMotor), 0.15);
+titan_->SetSpeed(static_cast<uint8_t>(kLeftMotor), 0.2);
 
 right = true;
 }
 
 void Encoderma::LeftTurn() {
+std::this_thread::sleep_for(std::chrono::milliseconds(100));
 titan_->SetSpeed(static_cast<uint8_t>(kLeftMotor), LTspeed);
        RCLCPP_INFO(this->get_logger(), "モーターに指示が送られた");
 titan_->SetSpeed(static_cast<uint8_t>(kRightMotor), RTspeed);
@@ -100,7 +115,7 @@ left = true;
 
 void Encoderma::setSpeed() {
 
-
+  std::this_thread::sleep_for(std::chrono::milliseconds(100));
     titan_->SetSpeed(static_cast<uint8_t>(kLeftMotor), Lspeed);
     RCLCPP_INFO(this->get_logger(), "モーターに指示が送られた");
     titan_->SetSpeed(static_cast<uint8_t>(kRightMotor), Rspeed);  
@@ -108,6 +123,7 @@ void Encoderma::setSpeed() {
 
 
 void Encoderma::setspeedstop() {
+  std::this_thread::sleep_for(std::chrono::milliseconds(100));
     titan_->SetSpeed(static_cast<uint8_t>(kLeftMotor), 0.0);
        RCLCPP_INFO(this->get_logger(), "モーターに指示が送られた");
     titan_->SetSpeed(static_cast<uint8_t>(kRightMotor), 0.0);
@@ -161,13 +177,13 @@ const int right_count =
     right_delta =
         std::abs(distance[1] - previous_distance_[1]);
 
-    TotalDistance += right_delta;
+    TotalDistance += (right_delta + left_delta) / 2.0;
 
     previous_distance_ = distance;
 
 
 
-RCLCPP_INFO(this->get_logger(), "右のエンコーダーカウント%d : 左のエンコーダーカウント%d トータル距離%lf 右%lf, 左%lf", right_count, left_count, TotalDistance, right_delta, left_delta);
+
 
 
 
