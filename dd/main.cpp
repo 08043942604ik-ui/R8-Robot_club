@@ -1,5 +1,7 @@
 #include "Robotmainmove.h"
-#include <stdexcept>
+#include "button.h"
+#include "accounting.h"
+#include <exception>
 #include <iostream>
 #include <General.h>
 
@@ -7,17 +9,20 @@ int main(int argc, char * argv[]) {
     
 try {    
     rclcpp::init(argc, argv);
-    auto node = std::make_shared<Robotmain>();
-    auto ganel = std::make_shared<Generalva>(); 
-
-    rclcpp::executors::MultiThreadedExecutor executor;
-    executor.add_node(node);
-    std::cout << "test" << std::endl;
+    
+    auto vmx = std::make_shared<VMXPi>(true, 50);
+    auto encoder = std::make_shared<Encoderma>(vmx);
+    auto button_node = std::make_shared<BFE>(vmx);
+    auto accounta = std::make_shared<SVE>(encoder, button_node);
+   
+    accounta->executorAdder(accounta);
+    accounta->executorAdder(button_node);
      std::this_thread::sleep_for(std::chrono::milliseconds(1));
-    executor.spin();
-    std::cout << "test" << std::endl;
-    std::this_thread::sleep_for(std::chrono::milliseconds(1));
-   ganel->LWaitingThread();
+     while(rclcpp::ok()) {
+    accounta->executorSpin_some();
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+   
+    }
     rclcpp::shutdown();
     return 0;
 }
