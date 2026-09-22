@@ -149,6 +149,21 @@ void Encoderma::StopAll() {
   }
 }
 
+bool Encoderma::LimSwitchChecker() {
+if(titan_->GetLimitSwitch()) {
+
+return true;  
+}
+else {
+    
+return false;
+    
+}
+
+    
+}
+    
+
 
 void Encoderma::callback() {
 
@@ -182,6 +197,7 @@ const int right_count =
     previous_distance_ = distance;
 
 
+AYok = LimSwitchChecker();
 
 
 
