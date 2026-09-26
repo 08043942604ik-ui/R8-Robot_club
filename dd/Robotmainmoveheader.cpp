@@ -23,13 +23,16 @@ public:
  
 camera_group_ = this->create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
 
+sensor_group_ =
+    create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
 
 encoder_timer_ = this->create_wall_timer(
-    std::chrono::milliseconds(10),
+    std::chrono::milliseconds(30),
     [this]() {
-    
+        if(stopping_.load())
+    RCLCPP_INFO(this->get_logger(), "stopping is true");
               
-         if (stopping_.load() || !rclcpp::ok()) {
+         if (stopping_.load()) {
              return;
  }
  
@@ -46,7 +49,7 @@ encoder_timer_ = this->create_wall_timer(
         if (rclcpp::ok()) {
 
               
-        if (stopping_.load() || !rclcpp::ok()) {
+        if (stopping_.load()) {
            return;
   }
         static const auto start_time = this->now();
@@ -59,17 +62,17 @@ encoder_timer_ = this->create_wall_timer(
         }
     }
      }, 
-    encoder_group_);
+    sensor_group_);
 
    drive_timer_ = this->create_wall_timer(
 
-            std::chrono::milliseconds(20),
+            std::chrono::milliseconds(60),
 
             [this]() { 
            
               if(rclcpp::ok()) { 
                   
-              if (stopping_.load() || !rclcpp::ok()) {
+              if (stopping_.load()) {
                    return;
         }
                
@@ -106,6 +109,7 @@ request_stop();
     encoder_.reset();
     lidar_.reset();
     color_senser_.reset();
+
 }
 
 
@@ -122,6 +126,8 @@ void request_stop()
     if (encoder_) {
         encoder_->StopAll();
     }
+    stopping_.store(true);
+    drive_->Exchanger(true);
 }
    
 private:
@@ -137,4 +143,5 @@ private:
      rclcpp::TimerBase::SharedPtr sensor_timer_;
       rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr image_sub_; //realsenseにくるtopic "camera/camera/color/image_raw"の中のデータをを受け取るため
      std::atomic_bool stopping_{false};
+     rclcpp::CallbackGroup::SharedPtr sensor_group_;
     };
