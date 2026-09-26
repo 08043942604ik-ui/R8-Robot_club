@@ -26,12 +26,12 @@ void setspeedstop();
 void RightTurn();
 void LeftTurn();
   void StopAll();
+  void ResetEncoderd();
   
   // 20ms邵ｺ譁絶・邵ｺ・ｫ陷ｻ・ｼ邵ｺ・ｰ郢ｧ蠕個繝ｻ0驕倩ｲ橸ｽｾ蠕後・陋帶㊧・ｭ・｢邵ｺ・ｨ陋滂ｽ､邵ｺ・ｮ髯ｦ・ｨ驕会ｽｺ郢ｧ螳夲ｽ｡蠕娯鴬
   void callback();
 bool right = false;
 bool left = false;
-bool LimSwitchChecker();
 
  private:
   std::unique_ptr<studica_driver::Titan> titan_;
@@ -43,5 +43,4 @@ std::array<double, 2> previous_distance_{0.0, 0.0};
   double TotalDistance = 0.0;
   double left_delta = 0.0;
   std::shared_ptr<VMXPi> vmx_;
-bool AYok;
 };
