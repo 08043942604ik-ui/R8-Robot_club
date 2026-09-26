@@ -5,26 +5,9 @@
 namespace
 {
 constexpr double kPi = 3.14159265358979323846;
-double turn_count = 0.0;   // 回転したときの走行距離
-bool once = true;         // IncreaseAxis邵ｺ・ｮ隴崢陋ｻ譏ｴ笆｡邵ｺ鬘鯉ｽ｡蠕娯鴬陷・ｽｦ騾・・逡曾nint Kakudo = 0;            // 霑ｴ・ｾ陜ｨ・ｨ邵ｺ・ｮ髫苓ｲ橸ｽｺ・ｦ
-int deg = 0;               // IncreaseAxis邵ｺ・ｧ闖ｴ・ｿ邵ｺ繝ｻ・ｧ雋橸ｽｺ・ｦ
-double hypotenuse = 0.0;   // 陷ｴ貅ｽ縺帷ｸｺ・ｾ邵ｺ・ｧ邵ｺ・ｮ髴肴辨螻ｬ
-double DFH = 0.0;          // atan2邵ｺ・ｧ陷・ｽｺ邵ｺ蜉ｱ笳・囓雋橸ｽｺ・ｦ
-int AbsDegree = 0;         // 陜怜ｸｶ譏剰滋豕後・陟募ｾ後・髫苓ｲ橸ｽｺ・ｦ
-int turndeg = 0;          // 陷ｴ貅ｽ縺帷ｸｺ・ｸ陷ｷ莉｣・･邵ｺ貅假ｽ∫ｸｺ・ｮ陜玲ｫ・ｽｻ・｢髫苓ｲ橸ｽｺ・ｦ
-int result = 0;           // 驍ｨ蜈域｣｡
-int add = 0;              // 90陟趣ｽｦ郢ｧ蜑・ｽｽ蜍溷ｱ楢崕繝ｻ螻鍋ｸｺ・｣邵ｺ貅伉ｰ
-bool turnrunning = false; //隶匁ｻ会ｽｽ阮吮ｲ陜玲ｫ・ｽｻ・｢闕ｳ・ｭ邵ｺ繝ｻint times = 0;//闖ｴ蜍溷ｱ楢ｮ匁ｻ会ｽｽ阮吮ｲ陜玲ｫ・ｽｻ・｢邵ｺ蜉ｱ窶ｻ郢ｧ荵敖ｰ
-bool timer = true; //郢ｧ・ｿ郢ｧ・､郢晄ｧｭ繝ｻ郢ｧ・ｹ郢ｧ・ｿ郢晢ｽｼ郢晏現・定叉ﾂ陜玲ｧｭ竊鍋ｸｺ蜷ｶ・狗ｸｺ貅假ｽ―nbool end = false; //郢ｧ・ｿ郢ｧ・､郢晄ｧｭ繝ｻ邵ｺ・ｮ驕伜争辟夂ｹｧ雋槫徐郢ｧ荵昴・郢ｧ蜑・ｽｸﾂ陜玲ｧｭ笆｡邵ｺ莉｣竊鍋ｸｺ蜷ｶ・狗ｸｺ貅假ｽ―ndouble line = 0.0;
-int w = 0;
-double s = 0.0;//値確認
-double ll = 0.0;//wastedistが入るIncreaseAxis
-double pp = 0.0;//wastedistが入るAverageChecker
-int checker = 0; 
-double k = 0.0;//AverageCheckerの値入れ
-int po = 0;
-// 隴鯉ｽ｢陝・･繝ｻcallback陋幢ｽｴ邵ｺ・ｪ邵ｺ・ｩ邵ｺ・ｧ隴厄ｽｴ隴・ｽｰ邵ｺ霈費ｽ檎ｸｺ・ｦ邵ｺ繝ｻ・玖恆閧ｴ鄂ｲ
-}//namespace
+
+
+}
 
 
 RobotDrive::RobotDrive(Encoderma& encoder)
@@ -36,6 +19,23 @@ RobotDrive::RobotDrive(Encoderma& encoder)
     y = 0.0;
     Cx = 0.0;
     Cy = 0.0;
+  turn_count = 0.0;  
+  once = true;        
+  deg = 0;             
+  hypotenuse = 0.0;  
+  DFH = 0.0;         
+  AbsDegree = 0;       
+  turndeg = 0;          
+  result = 0;          
+  add = 0;              
+  timer = true; 
+  w = 0;
+  s = 0.0;
+  ll = 0.0;
+  pp = 0.0;
+  checker = 0; 
+  k = 0.0;
+  po = 0;
 
 encoders_.StopAll();
 }
@@ -65,18 +65,22 @@ int RobotDrive::GetDegree_man()
 
     Kakudo2 = GetDegree(turn_count);
 
+
     hole = wastedist.load();
 
-if(Kakudo2 == -90) {
-Kakudo2 = 270;
+if(RLC && Kakudo2 == 90) {
+Kakudo2 = 90;
+RLC = false;
 }
 
-if(Kakudo2 == -180) {
+if(RLC && Kakudo2 == 180) {
 Kakudo2 = 180;
+RLC = false;
 }      
 
-if(Kakudo2 == -270) {
-Kakudo2 = 90;
+if(RLC && Kakudo2 == 270) {
+Kakudo2 = 270;
+RLC = false;
 }
 Kakudo1.store(Kakudo1.load() + Kakudo2);
 
@@ -156,7 +160,7 @@ std::array<double, 2> RobotDrive::IncreaseAxis(int degrees)
     x = Cx - ((encoders_.GetTotalDistance() - ll) - xyPa);
   }
 
-  return {x + 30, y + 30};
+  return {x, y};
 
 
 
@@ -207,7 +211,7 @@ pp = turn_count;
     
 
   
-    if (pi >= 170 && pi <= 180) {
+    if (pi >= 160 && pi <= 180) {
       static_cast<int>(g);
       checker = g;
       return g;
@@ -444,7 +448,7 @@ case 7:
 
 float d = 0; //闕ｳﾂ陜玲ｧｭ笆｡邵ｺ繝ｻ 
     while(true) {
-      if(!rclcpp::ok()) return 0.0;
+      if(!rclcpp::ok() || tum.load()) return 0.0;
 
       
     if(d != 0.5f) {
@@ -458,7 +462,7 @@ float d = 0; //闕ｳﾂ陜玲ｧｭ笆｡邵ｺ繝ｻ
     if(encoders_.GetTotalDistance() >= line) {
 
      encoders_.setspeedstop();
-     std::this_thread::sleep_for(std::chrono::milliseconds(50));
+   
      turn_end = encoders_.GetTotalDistance();
      actual_turn_dist = turn_end - turn_start;
 
@@ -479,7 +483,7 @@ case 8:
 
 float d = 0; //闕ｳﾂ陜玲ｧｭ笆｡邵ｺ繝ｻ 
     while(true) {
-      if(!rclcpp::ok()) return 0.0;
+      if(!rclcpp::ok() || tum.load()) return 0.0;
 
       
     if(d != 0.5f) {
@@ -515,7 +519,7 @@ case 10:
 float d = 0;
 
     while(true) {     
-    if(!rclcpp::ok()) return 0.0;
+    if(!rclcpp::ok() || tum.load()) return 0.0;
 
       if(d != 0.5f) {
  std::this_thread::sleep_for(std::chrono::milliseconds(1));
@@ -551,16 +555,36 @@ default :
 set = 0;
 wastedist.store(wastedist.load() + actual_turn_dist); 
 
-if (o == 0) { times = 1; }
-else if (o == 1) { times = 2; }
-else if (o == 2) { times = 3; }
-else if (o == 3) { times = 4; }
-else if (o == 4) { times = 5; }
-else if (o == 5) { times = 6; } 
-else if (o == 6) { times = 7; }
-else if (o == 7) { times = 8; } 
-else if (o == 8) { times = 9; }
-else if (o == 9) { times = 10; }
+if (o == 0) { times = 1;
+
+}
+else if (o == 1) { times = 2;
+RLC = true;
+}
+else if (o == 2) { times = 3;
+
+}
+else if (o == 3) { times = 4;
+RLC = true;
+}
+else if (o == 4) { times = 5; 
+
+}
+else if (o == 5) { times = 6; 
+
+} 
+else if (o == 6) { times = 7; 
+RLC = true;
+}
+else if (o == 7) { times = 8; 
+
+} 
+else if (o == 8) { times = 9; 
+RLC = true;
+}
+else if (o == 9) { times = 10; 
+
+}
   
 Mrun = true;
 turnrunning = false; 
@@ -570,7 +594,10 @@ return actual_turn_dist;
 
 }//RobotTurn驍ｨ繧・ｽ冗ｹｧ繝ｻ
 
+void RobotDrive::Exchanger(bool de) {
 
+tum.store(de);
+}
 
 void RobotDrive::callback() {
 
@@ -602,7 +629,7 @@ Xof = IncreaseAxis(delivery);
 
 }
 }
-RCLCPP_INFO(get_logger(), "x座標%.2f : y座標%.2f : total %lf ", Xof[0], Xof[1], encoders_.GetTotalDistance());
+RCLCPP_INFO(get_logger(), "x座標%.2f : y座標%.2f : total %lf : wast %lf", Xof[0], Xof[1], encoders_.GetTotalDistance(), wastedist.load());
 if(!rclcpp::ok()) {
 
 genel_->LWaitingThread();
