@@ -8,11 +8,11 @@
 
 namespace {
 
-constexpr double Rspeed = -0.205;
-constexpr double Lspeed = 0.23;
+constexpr double Rspeed = -0.22;
+constexpr double Lspeed = 0.259;
 
-constexpr double RTspeed = -0.2;
-constexpr double LTspeed = -0.2;
+constexpr double RTspeed = -0.21;
+constexpr double LTspeed = -0.21;
 
 constexpr int kCanId = 42;
 constexpr int kMotorFrequency = 15600;
@@ -96,9 +96,9 @@ Encoderma::~Encoderma() {
 
 void Encoderma::RightTurn() {
 std::this_thread::sleep_for(std::chrono::milliseconds(100));
-titan_->SetSpeed(static_cast<uint8_t>(kRightMotor), 0.2);
+titan_->SetSpeed(static_cast<uint8_t>(kRightMotor), 0.21);
 
-titan_->SetSpeed(static_cast<uint8_t>(kLeftMotor), 0.2);
+titan_->SetSpeed(static_cast<uint8_t>(kLeftMotor), 0.21);
 
 right = true;
 }
@@ -149,21 +149,11 @@ void Encoderma::StopAll() {
   }
 }
 
-bool Encoderma::LimSwitchChecker() {
-if(titan_->GetLimitSwitch()) {
-
-return true;  
+void Encoderma::ResetEncoderd() {
+  for (int motor = 0; motor < 4; ++motor) {
+    titan_->ResetEncoder(static_cast<uint8_t>(motor));
+  }
 }
-else {
-    
-return false;
-    
-}
-
-    
-}
-    
-
 
 void Encoderma::callback() {
 
@@ -192,12 +182,10 @@ const int right_count =
     right_delta =
         std::abs(distance[1] - previous_distance_[1]);
 
-    TotalDistance += (right_delta + left_delta) / 2.0;
-
+    TotalDistance += right_delta;
     previous_distance_ = distance;
 
 
-AYok = LimSwitchChecker();
 
 
 
