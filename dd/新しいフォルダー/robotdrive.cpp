@@ -37,7 +37,7 @@ RobotDrive::RobotDrive(Encoderma& encoder)
   k = 0.0;
   po = 0;
 
-        publisher_ = create_publisher<std_msgs::msg::Bool>("/set_flag", 10);
+        publisher_ = create_publisher<std_msgs::msg::Float64>("/set_flag", 10);
 
         
 encoders_.StopAll();
@@ -230,16 +230,17 @@ bool RobotDrive::RobotMovement(double xe, double ye) {
 if(!rclcpp::ok()) return false;
  
 
-if(xe >= 0 && xe < 30) {
+if(xe >= 0 && xe < 20) {
 
 
 
-if(ye >= 0.0 && ye < 30.0) {
+if(ye >= 0.0 && ye < 20.0) {
 if(times == 9) {
 if(turnrunning == false) {
+  RCLCPP_WARN(get_logger(), "停止指令: y=%.1f mm, total=%.1f mm", ye, encoders_.GetTotalDistance());
 encoders_.setspeedstop();
 
-line = encoders_.GetTotalDistance() + 342.0;
+line = encoders_.GetTotalDistance() + 340.0;
 
 turnrunning = true;
 int current_w = times;
@@ -252,21 +253,21 @@ genel_->Turna_thread.join();
 genel_->Turna_thread = std::thread([this,current_w]() { RobotTurn(current_w); });
 
 std::this_thread::sleep_for(std::chrono::milliseconds(10));
-    
+
 }   
 }
 }
 
 
-else if(ye >= 600.0 && ye < 630.0) {
+else if(ye >= 600.0 && ye < 620.0) {
 
 if(times == 0 || times == 8) {
   
 if(turnrunning == false) {
-
+RCLCPP_WARN(get_logger(), "停止指令: y=%.1f mm, total=%.1f mm", ye, encoders_.GetTotalDistance());
  encoders_.setspeedstop();
 
-line = encoders_.GetTotalDistance() + 172.0;
+line = encoders_.GetTotalDistance() + 167.0;
 
 turnrunning = true;
 int current_w = times;
@@ -281,7 +282,7 @@ genel_->Turna_thread = std::thread([this, current_w]() {
 RobotTurn(current_w);
     });
 
-std::this_thread::sleep_for(std::chrono::milliseconds(40));
+std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
 }
 }
@@ -291,17 +292,17 @@ std::this_thread::sleep_for(std::chrono::milliseconds(40));
 
 
 
-else if(xe >= 600.0 && xe < 630.0) {
+else if(xe >= 500.0 && xe < 520.0) {
 
 
 
-if(ye >= 600.0 && ye < 630.0) {
+if(ye >= 600.0 && ye < 620.0) {
 if(times == 1 || times == 7) {
 if(turnrunning == false) {
-
+RCLCPP_WARN(get_logger(), "停止指令: y=%.1f mm, total=%.1f mm", ye, encoders_.GetTotalDistance());
  encoders_.setspeedstop();
 
-line = encoders_.GetTotalDistance() + 172.0;
+line = encoders_.GetTotalDistance() + 167.0;
 
 turnrunning = true;
      int current_w = times; 
@@ -318,7 +319,7 @@ if(genel_->Turna_thread.joinable()) {
   
 
 
-std::this_thread::sleep_for(std::chrono::milliseconds(40));
+std::this_thread::sleep_for(std::chrono::milliseconds(1));
     
 
 }
@@ -326,15 +327,15 @@ std::this_thread::sleep_for(std::chrono::milliseconds(40));
 }
 
 } //600 < y < 650
-else if(ye >= 1200.0 && ye < 1230.0) {
+else if(ye >= 1200.0 && ye < 1220.0) {
 
 
 if(times == 2 || times == 6) {
 if(turnrunning == false) {
-
+RCLCPP_WARN(get_logger(), "停止指令: y=%.1f mm, total=%.1f mm", ye, encoders_.GetTotalDistance());
  encoders_.setspeedstop();
 
-line = encoders_.GetTotalDistance() + 172.0;
+line = encoders_.GetTotalDistance() + 167.0;
 
 turnrunning = true;
 int current_w = times;
@@ -349,7 +350,7 @@ genel_->Turna_thread = std::thread([this, current_w]() {
 RobotTurn(current_w);
     });
 
-std::this_thread::sleep_for(std::chrono::milliseconds(40));
+std::this_thread::sleep_for(std::chrono::milliseconds(1));
     
 }
 
@@ -361,19 +362,21 @@ std::this_thread::sleep_for(std::chrono::milliseconds(40));
 } // 1500 < y <1550
 } // 600 < x < 650
 
-else if(xe >= 900.0 && xe < 930.0) {
+else if(xe >= 800.0 && xe < 820.0) {
 
-if(ye >= 1200.0 && ye < 1230.0) {
+if(ye >= 1200.0 && ye < 1220.0) {
 if(times == 3 || times == 5) {
 if(turnrunning == false) {
+  RCLCPP_WARN(get_logger(), "停止指令: y=%.1f mm, total=%.1f mm", ye, encoders_.GetTotalDistance());
 
  encoders_.setspeedstop();
 
-line = encoders_.GetTotalDistance() + 172.0;
+line = encoders_.GetTotalDistance() + 167.0;
 
 turnrunning = true;
 int current_w = times;
 times = -1;
+
 
   
 if(genel_->Turna_thread.joinable()) {
@@ -384,27 +387,27 @@ genel_->Turna_thread = std::thread([this, current_w]() {
 RobotTurn(current_w);
     });
 
-std::this_thread::sleep_for(std::chrono::milliseconds(40));
+std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
 }
 
 }
 
-} // 900 < y < 950
-else if(ye >= 1500.0 && ye < 1530.0){
+} // 1200 < y < 1250
+else if(ye >= 1700.0 && ye < 1720.0){
 
 
 if(times == 4) {
 if(turnrunning == false) {
-
+RCLCPP_WARN(get_logger(), "停止指令: y=%.1f mm, total=%.1f mm", ye, encoders_.GetTotalDistance());
  encoders_.setspeedstop();
 
-line = encoders_.GetTotalDistance() + 342.0;
+line = encoders_.GetTotalDistance() + 340.0;
 
 turnrunning = true;
 int current_w = times;
 times = -1;
-
+std::this_thread::sleep_for(std::chrono::seconds(3));
   
 if(genel_->Turna_thread.joinable()) {
         genel_->Turna_thread.join(); 
@@ -414,7 +417,7 @@ genel_->Turna_thread = std::thread([this, current_w]() {
 RobotTurn(current_w);
     });
 
-std::this_thread::sleep_for(std::chrono::milliseconds(40));
+std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
 }
 
@@ -429,7 +432,39 @@ std::this_thread::sleep_for(std::chrono::milliseconds(40));
 
 
 }// 600 < x < 650
+else if(xe >= 950.0 && xe < 970.0) { 
+if(ye >= 600.0 && ye < 620.0) {
+if(times == 1) {
+if(turnrunning == false) {
+RCLCPP_WARN(get_logger(), "停止指令: y=%.1f mm, total=%.1f mm", ye, encoders_.GetTotalDistance());
+ encoders_.setspeedstop();
 
+line = encoders_.GetTotalDistance() + 167.0;
+
+turnrunning = true;
+     int current_w = times; 
+      times = -1; 
+
+if(genel_->Turna_thread.joinable()) {
+          genel_->Turna_thread.join();
+      }
+
+      genel_->Turna_thread = std::thread([this, current_w]() {
+          RobotTurn(current_w);
+      });
+
+  publisher_->
+
+
+std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    
+
+}
+
+}
+
+} 
+}
 return true;//murn邵ｺ・ｫ陷茨ｽ･郢ｧ蠕鯉ｽ欺n}
 
 }
@@ -438,7 +473,7 @@ double RobotDrive::RobotTurn(int o) {
   
   if(!rclcpp::ok()) return 0.0;
 
-  float d = 0;
+  d = 0.0;
   double result_dist = 0.0;
     
 //豼ｶ・ｲ邵ｺ・ｫ郢ｧ蛹ｻ笆ｲ邵ｺ・ｦ陞溷ｳｨ・冗ｹｧ荵昶ｲ關謎ｹ昶斡邵ｺ・ｰ隘搾ｽ､
@@ -449,7 +484,7 @@ case 5:
 case 7:
 {
 
-float d = 0; //闕ｳﾂ陜玲ｧｭ笆｡邵ｺ繝ｻ 
+d = 0.0;//闕ｳﾂ陜玲ｧｭ笆｡邵ｺ繝ｻ 
     while(true) {
       if(!rclcpp::ok() || tum.load()) return 0.0;
 
@@ -476,7 +511,7 @@ if(encoders_.Limited() == 0) {
      encoders_.setspeedstop();
    
 
-wastedist.store(wastedist.load() + 172.0); 
+wastedist.store(wastedist.load() + 167.0); 
     break;
     
 }
@@ -492,7 +527,7 @@ case 6:
 case 8:
 {
 
-float d = 0; //闕ｳﾂ陜玲ｧｭ笆｡邵ｺ繝ｻ 
+d = 0.0;         //闕ｳﾂ陜玲ｧｭ笆｡邵ｺ繝ｻ 
     while(true) {
       if(!rclcpp::ok() || tum.load()) return 0.0;
 
@@ -517,10 +552,9 @@ if(encoders_.Limited() == 0) {
     if(encoders_.GetTotalDistance() >= line) {
 
      encoders_.setspeedstop();
-     std::this_thread::sleep_for(std::chrono::milliseconds(50));
+     std::this_thread::sleep_for(std::chrono::milliseconds(1));
  
-wastedist.store(wastedist.load() + 172.0); 
-  
+wastedist.store(wastedist.load() + 167.0); 
     break;
     
 }
@@ -532,9 +566,10 @@ break;
     
 case 4:
 case 10:
+case 9:
 {
  
-float d = 0;
+d = 0.0;         //闕ｳﾂ陜玲ｧｭ笆｡邵ｺ繝ｻ
 
     while(true) {     
     if(!rclcpp::ok() || tum.load()) return 0.0;
@@ -562,7 +597,7 @@ if(encoders_.Limited() == 0) {
       encoders_.setspeedstop();
       std::this_thread::sleep_for(std::chrono::milliseconds(50));
      
-wastedist.store(wastedist.load() + 342.0); 
+wastedist.store(wastedist.load() + 340.0); 
     break;
 }
 
@@ -578,8 +613,11 @@ default :
   break;
 
 }//switch驍ｨ繧・ｽ冗ｹｧ繝ｻ
+if(!(o == 9)) {
+  
 set = 0;
 
+}
 
 if (o == 0) { times = 1;
 
@@ -609,7 +647,9 @@ else if (o == 8) { times = 9;
 RLC = true;
 }
 else if (o == 9) { times = 10; 
-
+encoders_.StopAll();
+}
+else if (o == 10) { times = 0;
 }
   
 Mrun = true;
@@ -657,15 +697,12 @@ set = 1;
 
     
 if(turnrunning == false && rclcpp::ok()) {     
-Marn = RobotMovement(Xof[0], Xof[1]);
-
 delivery = GetDegree_man();
-
 Xof = IncreaseAxis(delivery);
+Marn = RobotMovement(Xof[0], Xof[1]);
 
 
 }
-
 
 
 
