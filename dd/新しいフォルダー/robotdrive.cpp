@@ -37,7 +37,7 @@ RobotDrive::RobotDrive(Encoderma& encoder)
   k = 0.0;
   po = 0;
 
-        publisher_ = create_publisher<std_msgs::msg::Float64>("/set_flag", 10);
+        publisher_ = create_publisher<std_msgs::msg::Float64>("/set/flag", 10);
 
         
 encoders_.StopAll();
@@ -87,13 +87,15 @@ RLC = false;
 }
 Kakudo1.store(Kakudo1.load() + Kakudo2);
 
+while (Kakudo1.load() <= 0) {
+      Kakudo1.store(Kakudo1.load() + 360);
+    }
+
 while (Kakudo1.load() >= 360) {
       Kakudo1.store(Kakudo1.load() - 360);
     }
       
-while (Kakudo1.load() <= -360) {
-      Kakudo1.store(Kakudo1.load() + 360);
-    }
+
     
 Mrun = false;
 }
@@ -228,13 +230,38 @@ pp = turn_count;
 bool RobotDrive::RobotMovement(double xe, double ye) {
  
 if(!rclcpp::ok()) return false;
- 
+if(xe >= -50 && xe < -30) {
 
-if(xe >= 0 && xe < 20) {
+if(ye >= 600 && ye < 620) {
+if(times == 8) {
+  
+if(turnrunning == false) {
+RCLCPP_WARN(get_logger(), "停止指令: y=%.1f mm, total=%.1f mm", ye, encoders_.GetTotalDistance());
+ encoders_.setspeedstop();
 
+line = encoders_.GetTotalDistance() + 167.0;
 
+turnrunning = true;
+int current_w = times;
+times = -1;
 
-if(ye >= 0.0 && ye < 20.0) {
+  
+if(genel_->Turna_thread.joinable()) {
+        genel_->Turna_thread.join(); 
+    }
+
+genel_->Turna_thread = std::thread([this, current_w]() {
+RobotTurn(current_w);
+    });
+
+std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
+}
+}
+
+}
+
+else if(ye >= 0.0 && ye < 20.0) {
 if(times == 9) {
 if(turnrunning == false) {
   RCLCPP_WARN(get_logger(), "停止指令: y=%.1f mm, total=%.1f mm", ye, encoders_.GetTotalDistance());
@@ -258,10 +285,17 @@ std::this_thread::sleep_for(std::chrono::milliseconds(10));
 }
 }
 
+}
 
-else if(ye >= 600.0 && ye < 620.0) {
+else if(xe >= 0 && xe < 20) {
 
-if(times == 0 || times == 8) {
+
+
+
+
+ if(ye >= 600.0 && ye < 620.0) {
+
+if(times == 0) {
   
 if(turnrunning == false) {
 RCLCPP_WARN(get_logger(), "停止指令: y=%.1f mm, total=%.1f mm", ye, encoders_.GetTotalDistance());
@@ -362,7 +396,7 @@ std::this_thread::sleep_for(std::chrono::milliseconds(1));
 } // 1500 < y <1550
 } // 600 < x < 650
 
-else if(xe >= 800.0 && xe < 820.0) {
+else if(xe >= 760.0 && xe < 780.0) {
 
 if(ye >= 1200.0 && ye < 1220.0) {
 if(times == 3 || times == 5) {
@@ -453,7 +487,7 @@ if(genel_->Turna_thread.joinable()) {
           RobotTurn(current_w);
       });
 
-  publisher_->
+
 
 
 std::this_thread::sleep_for(std::chrono::milliseconds(1));
@@ -684,7 +718,7 @@ if(!rclcpp::ok()) return;
 
 
 if(set == 0 && encoders_.Limited() == 1) {
-std::this_thread::sleep_for(std::chrono::milliseconds(1));
+std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 encoders_.setSpeed();
 
 
@@ -703,8 +737,6 @@ Marn = RobotMovement(Xof[0], Xof[1]);
 
 
 }
-
-
 
 
 if(!rclcpp::ok()) {
